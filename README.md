@@ -28,10 +28,10 @@ Possible DB Tables
 Contact (Abstract?)
 *******************
 
-**Name** - charField
-**Email** - charField
-**Phone** - charField (11 char max)
-**Type** - charField
+**name** - charField
+**email** - charField
+**phone** - charField (11 char max)
+**type** - charField
 **notes** - textField
 **startTime** - datetime
 **endTime** - datetime
@@ -39,7 +39,15 @@ Contact (Abstract?)
 Computer
 ********
 
-asdf
+**name** - charField
+**restaurant** - foreignKey to Restaurant
+**OS** - charField (choice)
+**POS** - charField (choice)
+**description** - charField (optional)
+**online** - booleanField
+**active** - booleanField
+**failures** - textField
+**lastCheckIn** - dateTimeField
 
 Restaurant
 **********
