@@ -52,17 +52,17 @@ Computer
 Restaurant
 **********
 
-**contactList** - ForeignKey || CSVField
-**computerList** - ForeignKey || CSVField
-**name** - charField
-**address** - charField
-**city** - charField
-**state** - charField (choice)
-**email** - charField
-**notes** - textField
-**active** - booleanField
-**alert** - booleanField
-**agent** - ForeignKey TODO: More than one?
-**startHours** - DateTimeField
-**endHours** - DateTimeField
-**refusalMsg** - charField
++ **contactList** - ForeignKey || CSVField
++ **computerList** - ForeignKey || CSVField
++ **name** - charField
++ **address** - charField
++ **city** - charField
++ **state** - charField (choice)
++ **email** - charField
++ **notes** - textField
++ **active** - booleanField (reject tracking if false)
++ **alert** - booleanField \[track if active, but (do || not)alert \]
++ **agent** - ForeignKey TODO: More than one?
++ **startHours** - DateTimeField
++ **endHours** - DateTimeField
++ **refusalMsg** - charField
