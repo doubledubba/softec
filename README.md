@@ -1,5 +1,5 @@
 Softec System Notifications (SOFNO)
-=====================================
+===================================
 
 Sofno will be able to notify Softec's agents when one of their clients computers goes offline.
 
@@ -21,3 +21,21 @@ Features
 + Can be set to only notify at sane times of the day
 + Can do geolocation based on the computer's ip and show an approximation of where it is with google maps
 + Can issue remote commands to the client computers
+
+Possible DB Tables
+------------------
+
+Contact (Abstract?)
+*******************
+
+asdf
+
+Computer
+********
+
+asdf
+
+Restaurant
+**********
+
+asdf
