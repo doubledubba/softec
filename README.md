@@ -28,7 +28,7 @@ Possible DB Tables
 Contact (Abstract?)
 *******************
 
-Name - *string*
+**Name** - string
 
 
 asdf
