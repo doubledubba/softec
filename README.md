@@ -33,8 +33,8 @@ Contact (Abstract?)
 + **phone** - charField (11 char max)
 + **type** - charField
 + **notes** - textField
-+ **startTime** - datetime
-+ **endTime** - datetime
++ **startTime** - DateTimeField
++ **endTime** - DateTimeField
 
 Computer
 ********
@@ -52,4 +52,17 @@ Computer
 Restaurant
 **********
 
-asdf
+**contactList** - ForeignKey || CSVField
+**computerList** - ForeignKey || CSVField
+**name** - charField
+**address** - charField
+**city** - charField
+**state** - charField (choice)
+**email** - charField
+**notes** - textField
+**active** - booleanField
+**alert** - booleanField
+**agent** - ForeignKey TODO: More than one?
+**startHours** - DateTimeField
+**endHours** - DateTimeField
+**refusalMsg** - charField
