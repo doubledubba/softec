@@ -28,10 +28,13 @@ Possible DB Tables
 Contact (Abstract?)
 *******************
 
-**Name** - string
-
-
-asdf
+**Name** - charField
+**Email** - charField
+**Phone** - charField (11 char max)
+**Type** - charField
+**notes** - textField
+**startTime** - datetime
+**endTime** - datetime
 
 Computer
 ********
