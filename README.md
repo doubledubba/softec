@@ -28,6 +28,9 @@ Possible DB Tables
 Contact (Abstract?)
 *******************
 
+Name - *string*
+
+
 asdf
 
 Computer
