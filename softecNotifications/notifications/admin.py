@@ -15,3 +15,17 @@ class RestaurantAdmin(admin.ModelAdmin):
 admin.site.register(Agent, AgentAdmin)
 admin.site.register(Owner, OwnerAdmin)
 admin.site.register(Restaurant, RestaurantAdmin)
+
+'''
+
+    name - charField
+    address - charField
+    city - charField
+    state - charField (choice)
+    email - charField
+    notes - textField
+    active - booleanField (reject tracking if false)
+    alert - booleanField [track if active, but (do || not)alert ]
+    agent - ForeignKey TODO: More than one? Many to Many
+    refusalMsg - charField
+'''
