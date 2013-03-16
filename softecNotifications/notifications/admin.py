@@ -7,10 +7,10 @@ class AgentAdmin(admin.ModelAdmin):
 
 class OwnerAdmin(admin.ModelAdmin):
     '''Should show the owner's corresponding restaurant'''
-    list_display = ('name', 'restaurant', 'email', 'phone')
+    list_display = ('name', 'email', 'phone')
 
 class RestaurantAdmin(admin.ModelAdmin):
-    list_display = ('name', 'owners',)
+    list_display = ('name',)
 
 admin.site.register(Agent, AgentAdmin)
 admin.site.register(Owner, OwnerAdmin)

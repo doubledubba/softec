@@ -29,7 +29,8 @@ class Agent(BaseContact):
     # the agent and the restaurant models
 
 class Owner(BaseContact):
-    restaurant = models.ForeignKey('Restaurant')
+    pass
+    #restaurant = models.ForeignKey('Restaurant')
 
 class Restaurant(RestrictedHoursModel):
     name = models.CharField(max_length=80)
@@ -41,8 +42,9 @@ class Restaurant(RestrictedHoursModel):
     notes = models.TextField()
     active = models.BooleanField()
     alert = models.BooleanField()
-    # agent = models.ManyToManyField(Agent)
-
+    agents = models.ManyToManyField(Agent)
+    owners = models.ManyToManyField(Owner)
+'''
     def owners(self):
         string = ''
         for owner in self.owner_set.all():
@@ -52,4 +54,4 @@ class Restaurant(RestrictedHoursModel):
         return string
 
     owners.short_description = 'Restaurant Owners'
-
+'''
