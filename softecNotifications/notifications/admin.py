@@ -7,7 +7,8 @@ class AgentAdmin(admin.ModelAdmin):
 
 class OwnerAdmin(admin.ModelAdmin):
     '''Should show the owner's corresponding restaurant'''
-    list_display = ('name', 'email', 'phone')
+    list_display = ('name', 'email', 'phone', 'restaurants')
+    list_editable = ('email', 'phone')
 
 class RestaurantAdmin(admin.ModelAdmin):
     list_display = ('name',)
