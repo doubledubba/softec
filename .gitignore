@@ -2,3 +2,5 @@
 *.py~
 *.html~
 *.md~
+*.swp
+venv/build
