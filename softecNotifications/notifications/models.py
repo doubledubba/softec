@@ -32,8 +32,6 @@ class BaseContact(RestrictedHoursModel):
         
 class Agent(BaseContact):
     pass
-    # figure out a many to many relationship here between
-    # the agent and the restaurant models
 
 class Owner(BaseContact):
     def restaurants(self):
@@ -46,6 +44,7 @@ class Restaurant(RestrictedHoursModel):
     address = models.CharField(max_length=80)
     city = models.CharField(max_length=80)
     state = models.CharField(max_length=80)
+    phone = models.CharField(max_length=11, blank=True)
     refusalMsg = models.CharField(max_length=80, blank=True, null=True)
     email = models.EmailField(blank=True, null=True)
     notes = models.TextField(blank=True, null=True)
