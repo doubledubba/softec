@@ -11,16 +11,30 @@ class BaseContact(RestrictedHoursModel):
     name = models.CharField(max_length=80)
     email = models.EmailField()
     phone = models.CharField(max_length=11)
-    
+        
     class Meta:
         abstract = True
         
-    def __unicode__(self):
-        return self.name
-        
 class Agent(BaseContact):
     pass
-    
+
 class Owner(BaseContact):
-    pass
-    
+    restaurant = models.ForeignKey('Restaurant')
+
+    def __unicode__(self):
+        return self.name
+
+class Restaurant(RestrictedHoursModel):
+    name = models.CharField(max_length=80)
+
+    def __unicode__(self):
+        return self.name
+
+    def owners(self):
+        string = ''
+        for owner in self.owner_set.all():
+            string += '%s, ' % owner.name
+        if string:
+            string = string[0:-2]
+        return string
+
