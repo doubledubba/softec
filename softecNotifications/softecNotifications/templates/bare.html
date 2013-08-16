@@ -1,0 +1,84 @@
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="">
+    <meta name="author" content="Jose Luis Naranjo Gomez" >
+
+    <title>Softec Systems</title>
+
+    <!-- Bootstrap core CSS -->
+    <link href="/static/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Custom styles for this template -->
+    <link href="/static/css/jumbotron.css" rel="stylesheet">
+    
+    <link rel="shortcut icon" href="/static/img/favicon.ico" type="image/x-icon">
+    <link rel="icon" href="/static/img/favicon.ico" type="image/x-icon">
+ 
+{% block head %}
+{% endblock head %} 
+ 
+  </head>
+
+  <body>
+
+    <div class="navbar navbar-inverse navbar-fixed-top">
+      <div class="container">
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a class="navbar-brand" href="#">Softec Network</a>
+        </div>
+        <div class="navbar-collapse collapse">
+          <ul class="nav navbar-nav">
+            <li class="active"><a href="#">Home</a></li>
+            {% if user.is_staff %}
+            <li><a href="/admin/">Admin</a></li>
+            {% endif %}
+            <li><a href="#about">Restaurant Listings</a></li>
+            <li><a href="#contact">Knowledge Base</a></li>
+          </ul>
+          
+{% if user.is_authenticated %}
+          <ul class="nav navbar-nav navbar-right">
+            <li class="active"><a href="/logout/">
+            {% firstof user.get_full_name user.username %} (logout)
+            </a></li>
+          </ul>
+{% else %}
+          <form class="navbar-form navbar-right" action="/login/" method="POST">
+          {% csrf_token %}
+            <input type="text" placeholder="Username" class="form-control" name="username">
+            <input type="password" placeholder="Password" class="form-control" name="password">
+            <button type="submit" class="btn">Sign in</button>
+          </form>
+{% endif %}
+        </div><!--/.navbar-collapse -->
+      </div>
+    </div>
+
+    <div class="container">
+    {% block body %}
+    {% endblock body %}
+
+    
+
+        <hr>
+
+        <footer>
+          <p>&copy; Softec Systems 2013</p>
+        </footer>
+      </div>
+
+    </div> <!-- /container -->
+
+    <script src="/static/js/jquery.js"></script>
+    <script src="/static/js/bootstrap.min.js"></script>
+  </body>
+</html>

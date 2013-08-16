@@ -1,6 +1,32 @@
 {% extends "base.html" %}
 
 {% block body %}
-<h1>Stuff</h1>
-<p>Goes here</p>
+      <!-- Main jumbotron for a primary marketing message or call to action -->
+      <div class="jumbotron">
+        <h1>Welcome to Softec Network!</h1>
+        <p>This is the framework for Softec System's network system. It keeps track of all of Softec's client computers, and alerts the Restaurant's staff, owner, and corresponding Softec agent on system failure.</p>
+        <p><a class="btn btn-primary btn-large">Learn more &raquo;</a></p>
+      </div>
+
+      <div class="body-content">
+
+        <!-- Example row of columns -->
+        <div class="row">
+          <div class="col-lg-4">
+            <h2>Admin Page</h2>
+            <p>This page is only meant for Softec System employees to use. It is used to add, delete, and modify objects in the database.</p>
+            <p><a class="btn btn-default" href="#">View details &raquo;</a></p>
+          </div>
+          <div class="col-lg-4">
+            <h2>Computer Listings</h2>
+            <p>This is an interactive page the displays all of the restaurants in the database, and their connectivity.</p>
+            <p><a class="btn btn-default" href="#">View details &raquo;</a></p>
+         </div>
+          <div class="col-lg-4">
+            <h2>Knowledge Base</h2>
+            <p>This knowledge base stores restructured text articles for future reference.</p>
+            <p><a class="btn btn-default" href="#">View details &raquo;</a></p>
+          </div>
+        </div>
+
 {% endblock body %}

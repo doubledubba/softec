@@ -11,6 +11,7 @@ def logout_user(request):
     return redirect('/')
     
 def login_user(request):
-    '''pending implementation'''
-    pass
-
+    if request.method == 'GET':
+        return render(request, 'sign_in.html')
+    elif request.method == 'POST':
+        return HttpResponse('post')
