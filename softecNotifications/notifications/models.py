@@ -48,14 +48,13 @@ class Restaurant(RestrictedHoursModel):
     refusalMsg = models.CharField(max_length=80, blank=True, null=True)
     email = models.EmailField(blank=True, null=True)
     notes = models.TextField(blank=True, null=True)
-    active = models.BooleanField(default=True)
-    alert = models.BooleanField(default=True)
+    active = models.BooleanField(default=True, help_text='Enable/Disable monitoring')
+    alert = models.BooleanField(default=True, help_text='Enable/Disable alerts on failure')
     agents = models.ManyToManyField(Agent, blank=True)
     owners = models.ManyToManyField(Owner, blank=True)
 
     def title(self):
-        map = (self.name, self.city, self.state)
-        return '%s in %s, %s' % map
+        return '%s in %s, %s' % (self.name, self.city, self.state)
 
 def querySetToStr(objects, attr):
     '''Turns a list of ORM instances into a nice string.
@@ -64,8 +63,8 @@ def querySetToStr(objects, attr):
     pass in a str attribute or a str returning callable of the instances in that set'''
 
     string = ''
-    for object in objects:
-        attribute = getattr(object, attr)
+    for obj in objects:
+        attribute = getattr(obj, attr)
         if callable(attribute):
             mod = attribute()
         else:
