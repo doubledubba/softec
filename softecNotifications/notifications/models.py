@@ -63,9 +63,12 @@ class Restaurant(RestrictedHoursModel):
 
 class Computer(models.Model):
     name = models.CharField(max_length=80)
-    cid = models.IntegerField(blank=True, null=True, default=0)
+    cid = models.IntegerField(blank=True, null=True, default=0) # shouldn't be visible in admin page
+    restaurant = models.ForeignKey(Restaurant)
     
-    def __unicode__ (self): return unicode(self.cid)
+    
+    def __unicode__ (self):
+        return unicode(self.cid)
 
 def querySetToStr(objects, attr):
     '''Turns a list of ORM instances into a nice string.
@@ -89,6 +92,7 @@ def querySetToStr(objects, attr):
     
 @receiver(post_save, sender=Computer)
 def init_cid(sender,instance, signal, created, **kwargs):
+    'Makes sure that each cid is unique'
     if created:
         print instance, 'created'
         highest = settings.getHighestID() + 1
