@@ -16,17 +16,17 @@
   <style type="text/css"></style><script type="text/javascript" src="chrome-extension://pmoflmbbcfgacopiikdcpmbiellfihdg/webkitnotif-wrapper-builder.js"></script><script type="text/javascript" src="chrome-extension://pmoflmbbcfgacopiikdcpmbiellfihdg/unity-api-page-proxy-builder-gen.js"></script><script type="text/javascript" src="chrome-extension://pmoflmbbcfgacopiikdcpmbiellfihdg/unity-api-page-proxy.js"></script><style type="text/css"></style></head>
 
 
-      <form class="form-signin">
+      <form class="form-signin" action="/login/" method="POST">
+      	{% csrf_token %}
         <h2 class="form-signin-heading">Please sign in</h2>
-        <input type="text" class="form-control" placeholder="Email address" autofocus="">
-        <input type="password" class="form-control" placeholder="Password">
+        <input name="username" type="text" class="form-control" placeholder="Email address" autofocus="">
+        <input name="password" type="password" class="form-control" placeholder="Password">
         <label class="checkbox">
           <input type="checkbox" value="remember-me"> Remember me
         </label>
         <button class="btn btn-large btn-primary btn-block" type="submit">Sign in</button>
       </form>
 
-    </div> <!-- /container -->
 
   
 <embed type="application/x-unity-webapps-npapi" id="unityChromiumExtensionId" height="0" width="0" style="display: block !important;">

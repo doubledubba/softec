@@ -1,1 +1,15 @@
 {% extends "bare.html" %}
+
+{% block container %}
+  {% if alert and message %}
+      <br>
+					<div class="alert alert-dismissable alert-{{ alert }}">
+					  <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+					  <strong>{{ message_title }}</strong> {{ message }}
+					</div>
+        {% endif %}
+
+	{% block body %}
+	{% endblock body %}	
+	
+{% endblock container %}
