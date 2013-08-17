@@ -66,6 +66,14 @@ class Migration(SchemaMigration):
         ))
         db.create_unique(m2m_table_name, ['restaurant_id', 'owner_id'])
 
+        # Adding model 'Computer'
+        db.create_table(u'notifications_computer', (
+            (u'id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
+            ('name', self.gf('django.db.models.fields.CharField')(max_length=80)),
+            ('cid', self.gf('django.db.models.fields.IntegerField')(default=0, null=True, blank=True)),
+        ))
+        db.send_create_signal(u'notifications', ['Computer'])
+
 
     def backwards(self, orm):
         # Deleting model 'Agent'
@@ -83,6 +91,9 @@ class Migration(SchemaMigration):
         # Removing M2M table for field owners on 'Restaurant'
         db.delete_table(db.shorten_name(u'notifications_restaurant_owners'))
 
+        # Deleting model 'Computer'
+        db.delete_table(u'notifications_computer')
+
 
     models = {
         u'notifications.agent': {
@@ -93,6 +104,12 @@ class Migration(SchemaMigration):
             'name': ('django.db.models.fields.CharField', [], {'max_length': '80'}),
             'phone': ('django.db.models.fields.CharField', [], {'max_length': '11', 'blank': 'True'}),
             'startHours': ('django.db.models.fields.DateTimeField', [], {'null': 'True', 'blank': 'True'})
+        },
+        u'notifications.computer': {
+            'Meta': {'object_name': 'Computer'},
+            'cid': ('django.db.models.fields.IntegerField', [], {'default': '0', 'null': 'True', 'blank': 'True'}),
+            u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
+            'name': ('django.db.models.fields.CharField', [], {'max_length': '80'})
         },
         u'notifications.owner': {
             'Meta': {'object_name': 'Owner'},

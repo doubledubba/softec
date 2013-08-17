@@ -1,5 +1,5 @@
 from django.contrib import admin
-from notifications.models import Agent, Owner, Restaurant
+from notifications.models import Agent, Owner, Restaurant, Computer
 
 class ContactAdmin(admin.ModelAdmin):
     fieldsets = (
@@ -26,4 +26,5 @@ class RestaurantAdmin(admin.ModelAdmin):
 admin.site.register(Agent, AgentAdmin)
 admin.site.register(Owner, OwnerAdmin)
 admin.site.register(Restaurant, RestaurantAdmin)
+admin.site.register(Computer)
 

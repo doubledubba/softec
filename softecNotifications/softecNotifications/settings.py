@@ -152,3 +152,21 @@ LOGGING = {
         },
     }
 }
+
+IDCountFP = os.path.join(PROJECT_ROOT, 'IDCounter.txt')
+open(IDCountFP, 'a').close()
+
+def getHighestID():
+    with open(IDCountFP, 'r') as fh:
+        txt = fh.read().strip()
+        if txt.isdigit():
+            return int(txt)
+        else:
+            raise Exception("%s has been tampered with!" % IDCountFP)
+            # if this happens, fix to most recent pk
+    
+def setHighestID(count):
+    with open(IDCountFP, 'w') as fh:
+        count = str(count)
+        fh.write(count)
+

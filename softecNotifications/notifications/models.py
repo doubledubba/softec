@@ -1,4 +1,8 @@
 from django.db import models
+from django.db.models.signals import post_save
+from django.dispatch import receiver
+
+from softecNotifications import settings
 
 '''TODO
 
@@ -55,6 +59,13 @@ class Restaurant(RestrictedHoursModel):
 
     def title(self):
         return '%s in %s, %s' % (self.name, self.city, self.state)
+        
+
+class Computer(models.Model):
+    name = models.CharField(max_length=80)
+    cid = models.IntegerField(blank=True, null=True, default=0)
+    
+    def __unicode__ (self): return unicode(self.cid)
 
 def querySetToStr(objects, attr):
     '''Turns a list of ORM instances into a nice string.
@@ -72,4 +83,16 @@ def querySetToStr(objects, attr):
         string += '%s, ' % mod
     if string:
         string = string[0:-2]
+        
     return string
+    
+    
+@receiver(post_save, sender=Computer)
+def init_cid(sender,instance, signal, created, **kwargs):
+    if created:
+        print instance, 'created'
+        highest = settings.getHighestID() + 1
+        instance.cid = highest
+        settings.setHighestID(highest)
+        instance.save()
+        
