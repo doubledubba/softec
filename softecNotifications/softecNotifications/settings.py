@@ -1,5 +1,6 @@
 import os
 
+LOGIN_URL = '/login/'
 PROJECT_ROOT = os.path.abspath(os.path.dirname(__file__))
 
 DEBUG = True

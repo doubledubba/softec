@@ -25,7 +25,9 @@ def logout_user(request):
     
 def login_user(request):
     if request.method == 'GET':
-        return render(request, 'sign_in.html')
+        next = {'next': request.GET.get('next') or '/'}
+        login_url = GetifyUrl('/login/', next)
+        return render(request, 'sign_in.html', {'login_url': login_url})
     elif request.method == 'POST':
         username = request.POST['username']
         password = request.POST['password']
@@ -50,5 +52,11 @@ def login_user(request):
                 'message': 'Your login information is incorrect. Try again!'
             }
             # Return an 'invalid login' error message.
-        url = GetifyUrl('/', mapping)
+        next = request.GET.get('next') or '/'
+        if not next:
+            next = '/'
+        username = request.GET.get('username')
+        if username:
+            mapping['username'] = username
+        url = GetifyUrl(next, mapping)
         return redirect(url)
