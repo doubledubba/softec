@@ -29,6 +29,9 @@ class RestrictedHoursModel(models.Model):
     class Meta:
         abstract = True
 
+    def available(self):
+        return self.start < datetime.now().time() < self.end
+
 class BaseContact(RestrictedHoursModel):
     name = models.CharField(max_length=80)
     email = models.EmailField(blank=True)
@@ -50,7 +53,7 @@ class Owner(BaseContact):
     restaurants.short_description = 'Owned restaurants'
 
 
-class Computer(RestrictedHoursModel):
+class Computer(models.Model):
     name = models.CharField(max_length=80)
     cid = models.IntegerField(blank=True, null=True, default=0) # shouldn't be visible in admin page
     restaurant = models.ForeignKey('Restaurant')
@@ -64,9 +67,13 @@ class Computer(RestrictedHoursModel):
     last_check_in = models.DateTimeField(null=True, blank=True)
     first_check_in = models.BooleanField('First check in?', default=True)
     notify_on_fail = models.BooleanField(default=True)
+    js_warning = models.BooleanField(default=True)
     
     def __unicode__ (self):
         return unicode(self.cid)
+
+    def get_absolute_url(self):
+        return '/computer/%d' % self.cid
 
     def is_active(self):
         'Active if restaurant and computer are active'
@@ -75,12 +82,23 @@ class Computer(RestrictedHoursModel):
 
     def check_in(self):
         if not self.is_active():
-            logger.debug("%d failed to check in because it is not active" % self.cid)
+            response = "%d failed to check in because it is not active" % self.cid
+            logger.debug(response)
+            return response
         else:
-            logger.info("%d checked in" % self.cid)
             self.last_check_in = datetime.utcnow().replace(tzinfo=utc)
             self.online = True
             self.save()
+            response = "%d checked in" % self.cid
+            logger.info(response)
+            return response
+
+    def getLatency(self):
+        """Returns the latency of a Computer expressed in seconds (int)."""
+
+        now = datetime.utcnow().replace(tzinfo=utc)
+        latency = (now - self.last_check_in).seconds
+        return latency
 
 
 class Restaurant(RestrictedHoursModel):
