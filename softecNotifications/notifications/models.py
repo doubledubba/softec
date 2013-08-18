@@ -89,7 +89,7 @@ class Computer(models.Model):
             self.last_check_in = datetime.utcnow().replace(tzinfo=utc)
             self.online = True
             self.save()
-            response = "%d checked in" % self.cid
+            response = "CID=%d checked in on %s" % (self.cid, datetime.now().strftime('%c'))
             logger.info(response)
             return response
 

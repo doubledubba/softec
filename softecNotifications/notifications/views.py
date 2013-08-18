@@ -1,3 +1,5 @@
+from datetime import datetime
+
 from django.shortcuts import render, get_object_or_404, redirect
 from django.contrib.auth.decorators import login_required
 from django.views.decorators.csrf import csrf_exempt
@@ -16,7 +18,7 @@ def listings(request):
 
 
 @csrf_exempt
-def update(request):
+def update_view(request):
 
     if 'cid' not in request.POST or 'digest' not in request.POST:
         raise Http404
@@ -38,7 +40,7 @@ def update(request):
 
 
 @csrf_exempt
-def check_in(request):
+def check_in_view(request):
     if 'cid' not in request.POST or 'digest' not in request.POST:
         raise Http404
     cid = strToInt(request.POST['cid'])

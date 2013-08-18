@@ -11,6 +11,7 @@ urlpatterns = patterns('',
 )
 
 urlpatterns += patterns('notifications.views',
-    url(r'^update/$'),
+    url(r'^update/$', 'update_view'),
+    url(r'check_in/$', 'check_in_view'),
     url(r'^listings/$', 'listings'),
 )
