@@ -6,8 +6,8 @@ from django.views.decorators.csrf import csrf_exempt
 from django.http import HttpResponse, Http404
 
 from notifications.models import Computer, Restaurant, Agent, Owner
-from notifications.helpers import digest, strToInt
-from softecNotifications.settings import CHECK_IN_RATE, logging
+from notifications.helpers import digest, strToInt, logging
+from softecNotifications.settings import CHECK_IN_RATE
 
 logger = logging.getLogger(__name__)
 
@@ -31,8 +31,7 @@ def update_view(request):
 
 
     computer = get_object_or_404(Computer, cid=cid)
-    computer.last_update = datetime.now()
-    computer.save()
+    computer.stamp_update()
 
     logging.info("Updated %d with CHECK_IN_RATE=%d" % (cid, CHECK_IN_RATE))
     return HttpResponse(CHECK_IN_RATE, content_type='plain/text')

@@ -1,20 +1,15 @@
 import os
-import logging
-
 CHECK_IN_RATE = 15
 
 LOGIN_URL = '/login/'
 PROJECT_ROOT = os.path.abspath(os.path.dirname(__file__))
 
 
+
 DEBUG = True
 TEMPLATE_DEBUG = DEBUG
 
-params = {'format': '[%(levelname)s] [%(asctime)s]: %(message)s', 'level':
-        logging.DEBUG}
-if not DEBUG:
-    params['level'] = logging.INFO
-logging.basicConfig(**params)
+
 
 ADMINS = (
     ('Luis Naranjo', 'luisnaranjo733@gmail.com'),
@@ -150,6 +145,10 @@ LOGGING = {
             'level': 'ERROR',
             'filters': ['require_debug_false'],
             'class': 'django.utils.log.AdminEmailHandler'
+        },
+        'null': {
+            'level': 'DEBUG',
+            'class': 'django.utils.log.NullHandler'
         }
     },
     'loggers': {
@@ -158,6 +157,11 @@ LOGGING = {
             'level': 'ERROR',
             'propagate': True,
         },
+        'django.db.backends': {
+            'handlers': ['null'],
+            'propagate': False,
+            'level': 'DEBUG',
+        }
     }
 }
 

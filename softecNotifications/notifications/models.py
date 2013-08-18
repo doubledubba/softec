@@ -6,6 +6,7 @@ from django.db.models.signals import post_save
 from django.dispatch import receiver
 
 from softecNotifications import settings, choices
+from notifications.helpers import logging
 
 '''TODO
 
@@ -14,7 +15,7 @@ improve aesthetics of the admin page
 
 '''
 
-logger = settings.logging.getLogger(__name__)
+logger = logging.getLogger(__name__)
 
 class RestrictedHoursModel(models.Model):
     startHours = models.DateTimeField("Start hours", blank=True, null=True)
@@ -92,6 +93,10 @@ class Computer(models.Model):
             response = "CID=%d checked in on %s" % (self.cid, datetime.now().strftime('%c'))
             logger.info(response)
             return response
+
+    def stamp_update(self):
+        self.last_update = datetime.utcnow().replace(tzinfo=utc)
+        self.save()
 
     def getLatency(self):
         """Returns the latency of a Computer expressed in seconds (int)."""

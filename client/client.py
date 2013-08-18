@@ -8,7 +8,7 @@ from time import sleep
 import requests
 from requests.exceptions import ConnectionError
 
-logger = logging.getLogger(__name__)
+logger = logging.getLogger(__file__)
 logger.setLevel(logging.DEBUG)
 
 cid = sys.argv[1]
@@ -26,11 +26,10 @@ print('Digest: %s' % digest)
 
 def connection(path, params={'cid': cid, 'digest': digest}):
     '''Takes path from domain name to connect to, returns request object.'''
-    try:
-        r = requests.post(url + path, data=params)
-        return r
-    except (ConnectionError, ValueError), tb:
-        logger.critical(str(tb))
+
+    r = requests.post(url + path, data=params)
+    return r
+
 
 # Fetch CHECK_IN_RATE from server
 r = connection('/update/')
@@ -41,10 +40,11 @@ print('CHECK_IN_RATE: %d' % CHECK_IN_RATE)
 
 def check_in():
     r = connection('/check_in/')
-    if r.ok:
-        print(r.text)
-    else:
-        print("Something went wrong")
+    if r:
+        if r.ok:
+            print(r.text)
+        else:
+            print("Something went wrong")
 
 if __name__ == '__main__':
     try:
