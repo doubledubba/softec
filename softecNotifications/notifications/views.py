@@ -21,3 +21,4 @@ def check_in(request):
     computer = get_object_or_404(Computer, cid=cid)
     response = computer.check_in()
     return HttpResponse(response, content_type='plain/text')
+#
