@@ -1,5 +1,6 @@
 from django.shortcuts import render, get_object_or_404, redirect
-from django.contrib.auth.decorators import login_required, csrf
+from django.contrib.auth.decorators import login_required
+from django.views.decorators.csrf import csrf_exempt
 from django.http import HttpResponse, Http404
 
 from notifications.models import Computer, Restaurant, Agent, Owner
@@ -11,7 +12,7 @@ def listings(request):
     return render(request, 'notifications/listings.html')
 
 
-@csrf.csrf_exempt
+@csrf_exempt
 def check_in(request):
     if 'cid' not in request.POST or 'digest' not in request.POST:
         raise Http404
