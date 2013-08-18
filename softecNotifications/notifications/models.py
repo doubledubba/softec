@@ -1,5 +1,4 @@
 from datetime import datetime
-from logging import getLogger
 
 from django.utils.timezone import utc
 from django.db import models
@@ -15,7 +14,7 @@ improve aesthetics of the admin page
 
 '''
 
-logger = getLogger(__name__)
+logger = settings.logging.getLogger(__name__)
 
 class RestrictedHoursModel(models.Model):
     startHours = models.DateTimeField("Start hours", blank=True, null=True)
@@ -65,6 +64,7 @@ class Computer(models.Model):
 
     failures = models.TextField(blank=True)
     last_check_in = models.DateTimeField(null=True, blank=True)
+    last_update = models.DateTimeField(null=True, blank=True)
     first_check_in = models.BooleanField('First check in?', default=True)
     notify_on_fail = models.BooleanField(default=True)
     js_warning = models.BooleanField(default=True)

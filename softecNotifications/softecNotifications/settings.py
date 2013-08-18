@@ -1,10 +1,20 @@
 import os
+import logging
+
+CHECK_IN_RATE = 15
 
 LOGIN_URL = '/login/'
 PROJECT_ROOT = os.path.abspath(os.path.dirname(__file__))
 
+
 DEBUG = True
 TEMPLATE_DEBUG = DEBUG
+
+params = {'format': '[%(levelname)s] [%(asctime)s]: %(message)s', 'level':
+        logging.DEBUG}
+if not DEBUG:
+    params['level'] = logging.INFO
+logging.basicConfig(**params)
 
 ADMINS = (
     ('Luis Naranjo', 'luisnaranjo733@gmail.com'),
