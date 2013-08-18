@@ -5,3 +5,5 @@
 *.swp
 venv/build
 *.*~
+migrations
+IDCounter.txt

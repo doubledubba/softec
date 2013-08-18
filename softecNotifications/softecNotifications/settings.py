@@ -118,8 +118,6 @@ INSTALLED_APPS = (
     'django.contrib.staticfiles',
     'django.contrib.admin',
 
-    'south',
-
     'home',
     'notifications',
 )
@@ -153,7 +151,8 @@ LOGGING = {
     }
 }
 
-IDCountFP = os.path.join(PROJECT_ROOT, 'IDCounter.txt')
+SCRIPTS = os.path.join(PROJECT_ROOT, 'scripts')
+IDCountFP = os.path.join(SCRIPTS, 'IDCounter.txt')
 open(IDCountFP, 'a').close()
 
 def getHighestID():
