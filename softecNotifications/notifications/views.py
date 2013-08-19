@@ -19,14 +19,15 @@ def listings(request):
 
 @csrf_exempt
 def update_view(request):
-
-    if 'cid' not in request.POST or 'digest' not in request.POST:
-        raise Http404
-
     cid = strToInt(request.POST['cid'])
 
+    if 'cid' not in request.POST or 'digest' not in request.POST:
+        logger.warning('Nice try hacker')
+        raise Http404
+
     if digest(cid) != request.POST['digest']:
-        #raise Http404
+        data = (cid, request.POST['digest'])
+        logger.warning('Auth failed for cid=%r, digest=%r' % data)
         return HttpResponse('Invalid digest', content_type='plain/text')
 
 
