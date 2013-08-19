@@ -3,7 +3,7 @@
   text-decoration: none;
   cursor: pointer;
 }
-.badge-error {
+.badge-important {
   background-color: #b94a48;
 }
 .badge-error:hover {

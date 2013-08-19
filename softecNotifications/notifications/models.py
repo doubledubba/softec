@@ -1,4 +1,4 @@
-from datetime import datetime
+from datetime import datetime, time
 
 from django.utils.timezone import utc
 from django.db import models
@@ -18,8 +18,8 @@ improve aesthetics of the admin page
 logger = logging.getLogger(__name__)
 
 class RestrictedHoursModel(models.Model):
-    startHours = models.DateTimeField("Start hours", blank=True, null=True)
-    endHours = models.DateTimeField("End hours", blank=True, null=True)
+    startHours = models.TimeField("Start hours", blank=True, null=True)
+    endHours = models.TimeField("End hours", blank=True, null=True)
 
     def __unicode__(self):
         attr = 'name'
@@ -30,7 +30,9 @@ class RestrictedHoursModel(models.Model):
         abstract = True
 
     def available(self):
-        return self.start < datetime.now().time() < self.end
+        if self.endHours == time(hour=0, minute=0):
+            self.endHours = time(hour=23, minute=59, second=59)
+        return self.startHours < datetime.now().time() < self.endHours
 
 class BaseContact(RestrictedHoursModel):
     name = models.CharField(max_length=80)
@@ -55,7 +57,7 @@ class Owner(BaseContact):
 
 class Computer(models.Model):
     name = models.CharField(max_length=80)
-    cid = models.IntegerField(blank=True, null=True, default=0) # shouldn't be visible in admin page
+    cid = models.IntegerField(blank=True, null=True, default=0, unique=True) # shouldn't be visible in admin page
     restaurant = models.ForeignKey('Restaurant')
     os = models.CharField("Operating system", max_length=100, choices=choices.os, blank=True)
     pos = models.CharField(max_length=100, choices=choices.pos, blank=True)

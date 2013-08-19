@@ -33,16 +33,16 @@
             <span class="icon-bar"></span>
             <span class="icon-bar"></span>
           </button>
-          <a class="navbar-brand" href="#">Softec Network</a>
+          <a class="navbar-brand" href="/">Softec Network</a>
         </div>
         <div class="navbar-collapse collapse">
           <ul class="nav navbar-nav">
-            <li class="active"><a href="#">Home</a></li>
+            <li class="active"><a href="/">Home</a></li>
             {% if user.is_staff %}
             <li><a href="/admin/">Admin</a></li>
             {% endif %}
             <li><a href="/listings/">Restaurant Listings</a></li>
-            <li><a href="#contact">Knowledge Base</a></li>
+            <li><a href="/knowledge/">Knowledge Base</a></li>
           </ul>
           
 {% if user.is_authenticated %}
