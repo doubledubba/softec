@@ -69,6 +69,11 @@ class Computer(models.Model):
     first_check_in = models.BooleanField('First check in?', default=True)
     notify_on_fail = models.BooleanField(default=True)
     js_warning = models.BooleanField(default=True)
+
+    @staticmethod
+    def get_actives():
+        'Query all active computers'
+        return Computer.objects.filter(restaurant__active=True, active=True)
     
     def __unicode__ (self):
         return unicode(self.cid)
@@ -81,9 +86,12 @@ class Computer(models.Model):
 
         return self.restaurant.active and self.active
 
+
     def check_in(self):
+        'Clean method of checking in computers periodically. As simple as calling.'
+
         if not self.is_active():
-            response = "%d failed to check in because it is not active" % self.cid
+            response = '%d failed to check in because it is not active' % self.cid
             logger.debug(response)
             return response
         else:
@@ -95,6 +103,9 @@ class Computer(models.Model):
             return response
 
     def stamp_update(self):
+        '''Use to show which computers have been updated with most recent
+        CHECK_IN_RATE. Just call it when they are updated.'''
+
         self.last_update = datetime.utcnow().replace(tzinfo=utc)
         self.save()
 

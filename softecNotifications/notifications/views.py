@@ -14,7 +14,19 @@ logger = logging.getLogger(__name__)
 
 @login_required
 def listings(request):
-    return render(request, 'notifications/listings.html')
+    offline = [computer for computer in Computer.get_actives() if not
+            computer.online]
+    offline.sort(key=lambda x: x.restaurant.name)
+
+    restaurants = list(Restaurant.objects.all()) # Find better solution
+    restaurants.sort(key=lambda x: x.name.lower())
+    restaurants = [r.computer_set.all() for r in restaurants]
+    params = {
+        'offline_computers': offline,
+        'restaurants': restaurants,
+        'timestamp': datetime.now(),
+    }
+    return render(request, 'notifications/listings.html', params)
 
 
 @csrf_exempt

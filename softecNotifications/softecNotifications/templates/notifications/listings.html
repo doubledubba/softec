@@ -1,5 +1,133 @@
 {% extends "base.html" %}
 
+{% block title %}Computer listing | Softec Systems{% endblock title %}
+{% block head %}
+
+<link href="/static/css/badges.css" rel="stylesheet">
+
+<script type="text/JavaScript">
+<!--
+function timedRefresh(timeoutPeriod) {
+	setTimeout("location.reload(true);",timeoutPeriod);
+}
+//   -->
+</script>
+{% endblock head %}
+
 {% block body %}
-<h1>Listings go here</h1>
+
+<body onload="JavaScript:timedRefresh(5000);">
+<h1>Listing last updated on {{ timestamp }}</h1>
+<hr>
+
+<!-- Start offline listing -->
+
+{% if offline_computers %}
+<table border="1" class="table table-condenses">
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>Name</th>
+            <th>Restaurant</th>
+            <th>Address</th>
+            <th>City</th>
+            <th>State</th>
+            <th>Phone</th>
+        </tr>
+    </thead>
+
+    <tbody>
+        {% for computer in offline_computers %} <!-- Offline computers only,
+        sorted alphabetically -->
+        <tr>
+            {% if computer.first_check %}
+            <td><a href="{{ computer.get_absolute_url }}"><span class="badge"
+                        >{{ computer.pk }}</span></a></td>
+            {% else %}
+
+            {% if computer.available %} <!-- Yellow for offline and ok -->
+            <td><a href="{{ computer.get_absolute_url }}"><span class="badge
+                        badge-warning">{{ computer.pk }}</span></a></td>
+            {% else %} <!-- Red for offline and not ok -->
+            <td><a href="{{ computer.get_absolute_url }}"><span class="badge
+                        badge-important">{{ computer.pk }}</span></a></td>
+            {% endif %}
+            {% endif %}
+
+            <td>{{ computer.name }}</td>
+            <td>{{ computer.restaurant }}</td>
+            <td>{{ computer.restaurant.address }}</td>
+            <td>{{ computer.restaurant.city }}</td>
+            <td>{{ computer.restaurant.state }}</td>
+            <td>{{ computer.restaurant.phone }}</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+{% else %}
+<h3>No computers are currently offline!</h3>
+{% endif %}
+
+<!-- End offline listing -->
+<!-- Start alphabetically Restaurant ordered online listing -->
+
+
+<table border="1" class="table table-condenses">
+    <thead>
+        <tr>
+            <th>Restaurant</th>
+            <th>ID</th>
+            <th>Name</th>
+            <th>Address</th>
+            <th>City</th>
+            <th>State</th>
+            <th>Phone</th>
+        </tr>
+    </thead>
+
+    <tbody>
+        {% for computers in restaurants %}
+        {% for computer in computers %}
+        <tr>
+            {% if forloop.first %}
+            <td rowspan="{{ computers.count }}">{{ computer.restaurant }}</td>
+
+            {% endif %}
+            <!-- -->
+
+            {% if computer.online %}
+            <td><a href="{{ computer.get_absolute_url }}"><span class="badge badge-warning">{{ computer.pk }}</span></a></td>
+            {% else %}
+
+            {% if computer.first_check %}
+            <td><a href="{{ computer.get_absolute_url }}"><span class="badge"
+                        >{{ computer.pk }}</span></a></td>
+            {% else %}
+
+            {% if computer.available %} <!-- Yellow for offline and ok -->
+            <td><a href="{{ computer.get_absolute_url }}"><span class="badge
+                        badge-warning">{{ computer.pk }}</span></a></td>
+            {% else %} <!-- Red for offline and not ok -->
+            <td><a href="{{ computer.get_absolute_url }}"><span class="badge
+                        badge-important">{{ computer.pk }}</span></a></td>
+            {% endif %}
+            {% endif %}
+            {% endif %}
+
+            <!-- -->
+            <td>{{ computer.name }}</td>
+            <td>{{ computer.restaurant.address }}</td>
+            <td>{{ computer.restaurant.city }}</td>
+            <td>{{ computer.restaurant.state }}</td>
+            <td>{{ computer.restaurant.phone }}</td>
+        </tr>
+        {% endfor %}
+        {% endfor %}
+    </tbody>
+</table>
+
+<!-- End Restaurant Grouping -->
+
+
 {% endblock body %}
