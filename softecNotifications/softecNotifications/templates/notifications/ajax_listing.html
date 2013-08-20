@@ -30,7 +30,7 @@ function get_offline_computers() {
 
 function tryit() {
     // create table
-    var $table = $('<table border="1" class="table table-condenses">');
+    var $table = $('<table id="myTable" border="1" class="table table-condenses">');
     // caption
     $table.append('<caption>Offline Computers</caption>')
     // thead
@@ -51,21 +51,23 @@ function tryit() {
     .append("<td>val</td>")
     .append("<td>val</td>");
 
-    // add another row
-    $tbody.append('<tr />').children('tr:last')
-    .append("<td>val</td>")
-    .append("<td>val</td>")
-    .append("<td>val</td>")
-    .append("<td>val</td>")
-    .append("<td>val</td>")
-    .append("<td>val</td>")
-    .append("<td>val</td>");
-
     // add table to dom
     $table.appendTo('#dyn_offline_table');
 
 }
 
+
+function addRow() {
+    $('#myTable tr:last').after('<tr>' +
+            '<td>asdfasdf</td>' +
+            '<td>10</td>' +
+            '<td>10</td>' +
+            '<td>10</td>' +
+            '<td>10</td>' +
+            '<td>10</td>' +
+            '<td>10</td>' +
+            '</tr>');
+}
 /**
  *         {% for computer in offline_computers %}
         <tr>
@@ -83,7 +85,7 @@ function tryit() {
 {% block body %}
 <legend>Listing</legend>
 
-<input type="submit" onclick="get_offline_computers()"> <br> <br>
+<input type="submit" onclick="addRow()"> <br> <br>
 
 
 <div class="row">
