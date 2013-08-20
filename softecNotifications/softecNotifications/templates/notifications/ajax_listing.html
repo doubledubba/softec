@@ -15,12 +15,55 @@ function get_offline_computers() {
 
                 if (!computer.online) {
                     console.log(computer);
+                    var div = document.getElementById('dyn_offline_table');
+                    div.innerHTML += '<tr>\n';
+                    div.innerHTML += '\t<td>' + computer.name + '</td>\n';
+                    div.innerHTML += '</tr>\n';
+
                 }
             })
         })
     });
 }
 
+function tryit() {
+    // create table
+    var $table = $('<table border="1" class="table table-condenses">');
+    // caption
+    $table.append('<caption>MyTable</caption>')
+    // thead
+    .append('<thead>').children('thead')
+    .append('<tr />').children('tr').append('<th>A</th><th>B</th><th>C</th><th>D</th>');
+
+    //tbody
+    var $tbody = $table.append('<tbody />').children('tbody');
+
+    // add row
+    $tbody.append('<tr />').children('tr:last')
+    .append("<td>val</td>")
+    .append("<td>val</td>")
+    .append("<td>val</td>")
+    .append("<td>val</td>");
+
+    // add another row
+    $tbody.append('<tr />').children('tr:last')
+    .append("<td>val</td>")
+    .append("<td>val</td>")
+    .append("<td>val</td>")
+    .append("<td>val</td>");
+
+    // add table to dom
+    $table.appendTo('#dyn_offline_table');
+
+}
+
+/**
+ *         {% for computer in offline_computers %}
+        <tr>
+            <td>{{ computer.cid }}</td>
+        </tr>
+        {% endfor %}
+ */
 
 </script>
 
@@ -29,7 +72,7 @@ function get_offline_computers() {
 {% block body %}
 <legend>Listing</legend>
 
-<input type="submit" onclick="get_offline_computers()"> <br> <br>
+<input type="submit" onclick="tryit()"> <br> <br>
 
 
 <div class="row">
@@ -73,4 +116,13 @@ function get_offline_computers() {
       </div><!-- /.modal-content -->
     </div><!-- /.modal-dialog -->
   </div><!-- /.modal -->
+
+
+    <div id="dyn_offline_table">
+
+    </div>
+
+
+
+
 {% endblock body %}
