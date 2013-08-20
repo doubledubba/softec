@@ -16,13 +16,58 @@ function timedRefresh(timeoutPeriod) {
 
 {% block body %}
 
-<body onload="JavaScript:timedRefresh(5000);">
-<h1>Listing last updated on {{ timestamp }}</h1>
-<hr>
+<!--<body onload="JavaScript:timedRefresh(5000);">-->
+<body>
+<br>
 
-<!-- Start offline listing -->
+<div class="row">
+  <div class="col-md-10">
+      <a data-toggle="modal" href="#myModal" class="btn btn-primary btn-md">What do all the colors mean?</a>
+  </div>
+  <div class="col-md-2">
+      <button type="button" class="btn btn-default btn-md" onclick="location.reload(true)">
+          <span class="glyphicon glyphicon-repeat"></span> Refresh
+      </button>
+  </div>
+</div>
+
+  <!-- Modal -->
+  <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+          <h4 class="modal-title">What do all of these different colors mean?</h4>
+        </div>
+        <div class="modal-body">
+            <span class="badge badge-success">C_ID</span>
+            <label>Online</label><br>
+
+            <span class="badge badge-important">C_ID</span>
+            <label>Offline during online hours for restaurant</label><br>
+
+            <span class="badge badge-warning">C_ID</span>
+            <label>Offline during offline hours for restaurant</label><br>
+
+            <span class="badge badge-inverse">C_ID</span>
+            <label>Deactivated computer</label><br>
+
+            <span class="badge">C_ID</span>
+            <label>Computer has not done it's first check in yet</label><br>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-primary" data-dismiss="modal">Close</button>
+        </div>
+      </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+  </div><!-- /.modal -->
+
+
+
+
 
 {% if offline_computers %}
+<p style="text-align: center;font-size: 30px">Offline Computers</p>
 <table border="1" class="table table-condenses">
     <thead>
         <tr>
@@ -54,13 +99,14 @@ function timedRefresh(timeoutPeriod) {
 </table>
 
 {% else %}
-<h3>No computers are currently offline!</h3>
+<h3 style="text-align: center;">No computers are currently offline!</h3>
+
 {% endif %}
 
 <!-- End offline listing -->
 <!-- Start alphabetically Restaurant ordered online listing -->
 
-
+<p style="text-align: center;font-size: 30px">All Computers</p>
 <table border="1" class="table table-condenses">
     <thead>
         <tr>
