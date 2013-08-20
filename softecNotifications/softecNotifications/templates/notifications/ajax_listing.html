@@ -1,14 +1,27 @@
 {% extends "base.html" %}
 
 {% block head %}
+<link href="/static/css/badges.css" rel="stylesheet">
 <script type="text/JavaScript">
 $(document).ready(function(){
-  $("button").click(function(){
-    $.get("http://www.w3schools.com/jquery/demo_test.asp",function(data,status){
-      alert("Data: " + data + "\nStatus: " + status);
-    });
-  });
+    // Your jQuery code goes in here
 });
+
+function get_offline_computers() {
+    $.getJSON('/listings/json', function(data) {
+        $.each(data.restaurants, function(index, restaurant) {
+            //console.log(restaurant.name);
+            $.each(restaurant.computers, function(index, computer) {
+
+                if (!computer.online) {
+                    console.log(computer);
+                }
+            })
+        })
+    });
+}
+
+
 </script>
 
 {% endblock head %}
@@ -16,5 +29,48 @@ $(document).ready(function(){
 {% block body %}
 <legend>Listing</legend>
 
-<button>Send an HTTP GET request to a page and get the result back</button>
+<input type="submit" onclick="get_offline_computers()"> <br> <br>
+
+
+<div class="row">
+  <div class="col-md-10">
+      <a data-toggle="modal" href="#myModal" class="btn btn-primary btn-md">What do all the colors mean?</a>
+  </div>
+  <div class="col-md-2">
+      <button type="button" class="btn btn-default btn-md" onclick="location.reload(true)">
+          <span class="glyphicon glyphicon-repeat"></span> Refresh
+      </button>
+  </div>
+</div>
+
+  <!-- Modal -->
+  <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+          <h4 class="modal-title">What do all of these different colors mean?</h4>
+        </div>
+        <div class="modal-body">
+            <span class="badge badge-success">C_ID</span>
+            <label>Online</label><br>
+
+            <span class="badge badge-important">C_ID</span>
+            <label>Offline during online hours for restaurant</label><br>
+
+            <span class="badge badge-warning">C_ID</span>
+            <label>Offline during offline hours for restaurant</label><br>
+
+            <span class="badge badge-inverse">C_ID</span>
+            <label>Deactivated computer</label><br>
+
+            <span class="badge">C_ID</span>
+            <label>Computer has not done it's first check in yet</label><br>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-primary" data-dismiss="modal">Close</button>
+        </div>
+      </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+  </div><!-- /.modal -->
 {% endblock body %}
