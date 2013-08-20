@@ -18,7 +18,8 @@ def listings(request):
             computer.online]
     offline.sort(key=lambda x: x.restaurant.name)
 
-
+    restaurants = list(Restaurant.objects.filter(active=True)) # Find better solution
+    restaurants.sort(key=lambda x: x.name.lower())
     restaurants = [r.computer_set.all() for r in restaurants]
 
     params = {
@@ -29,19 +30,6 @@ def listings(request):
     return render(request, 'notifications/listings.html', params)
 
 
-def dictize(obj, attrs):
-    """Turns a python object into a dictionary"""
-    model = {}
-    for attr in attrs:
-        if hasattr(obj, attr):
-            value = getattr(obj, attr)
-            if callable(value):
-                value = value()
-            model[attr] = value
-
-    return model
-
-from pprint import pformat
 def listings_json(request):
     model = {'restaurants': []}
     restaurants = list(Restaurant.objects.filter(active=True)) # Find better solution
@@ -54,14 +42,25 @@ def listings_json(request):
             'computers': [],
         }
         for computer in restaurant.computer_set.all():
-            jComputer = dictize(computer, ['name', 'cid', 'is_active', 'online', 'notify_on_fail', 'js_warning', 'get_badge'])
+            jComputer = {
+                'name': computer.name,
+                'cid': computer.cid,
+                'is_active': computer.is_active(),
+                'online': computer.online,
+                'notify_on_fail': computer.notify_on_fail,
+                'js_warning': computer.js_warning,
+                'get_badge': computer.get_badge()
+            }
             jRestaurant['computers'].append(jComputer)
 
         model['restaurants'].append(jRestaurant)
 
     data = json.dumps(model)
 
-    return HttpResponse(data, content_type='text/plain')
+    return HttpResponse(data, content_type='application/json')
+
+def ajax_listings(request):
+    return render(request, 'notifications/ajax_listing.html')
 
 
 @csrf_exempt

@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+
+{% block head %}
+<script type="text/JavaScript">
+$(document).ready(function(){
+  $("button").click(function(){
+    $.get("http://www.w3schools.com/jquery/demo_test.asp",function(data,status){
+      alert("Data: " + data + "\nStatus: " + status);
+    });
+  });
+});
+</script>
+
+{% endblock head %}
+
+{% block body %}
+<legend>Listing</legend>
+
+<button>Send an HTTP GET request to a page and get the result back</button>
+{% endblock body %}
