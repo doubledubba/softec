@@ -40,20 +40,8 @@ function timedRefresh(timeoutPeriod) {
         {% for computer in offline_computers %} <!-- Offline computers only,
         sorted alphabetically -->
         <tr>
-            {% if computer.first_check %}
-            <td><a href="{{ computer.get_absolute_url }}"><span class="badge"
-                        >{{ computer.cid }}</span></a></td>
-            {% else %}
-
-            {% if computer.restaurant.available %} <!-- Yellow for offline and ok -->
-            <td><a href="{{ computer.get_absolute_url }}"><span class="badge
-                        badge-warning">{{ computer.cid }}</span></a></td>
-            {% else %} <!-- Red for offline and not ok -->
-            <td><a href="{{ computer.get_absolute_url }}"><span class="badge
-                        badge-important">{{ computer.cid }}</span></a></td>
-            {% endif %}
-            {% endif %}
-
+            <td><a href="{{ computer.get_absolute_url }}">
+                <span class="{{ computer.get_badge }}">{{ computer.cid }}</span></a></td>
             <td>{{ computer.name }}</td>
             <td>{{ computer.restaurant }}</td>
             <td>{{ computer.restaurant.address }}</td>
@@ -96,26 +84,7 @@ function timedRefresh(timeoutPeriod) {
             {% endif %}
             <!-- -->
 
-            {% if computer.online %}
-            <td><a href="{{ computer.get_absolute_url }}"><span class="badge badge-success">{{ computer.cid }}</span></a></td>
-            {% else %}
-
-            {% if computer.first_check %}
-            <td><a href="{{ computer.get_absolute_url }}"><span class="badge"
-                        >{{ computer.cid }}</span></a></td>
-            {% else %}
-
-            {% if computer.restaurant.available %} <!-- Yellow for offline and ok -->
-            <td><a href="{{ computer.get_absolute_url }}"><span class="badge
-                        badge-warning">{{ computer.cid }}</span></a></td>
-            {% else %} <!-- Red for offline and not ok -->
-            <td><a href="{{ computer.get_absolute_url }}"><span class="badge
-                        badge-important">{{ computer.cid }}</span></a></td>
-            {% endif %}
-            {% endif %}
-            {% endif %}
-
-            <!-- -->
+            <td><a href="{{ computer.get_absolute_url }}"><span class="{{ computer.get_badge }}">{{ computer.cid }}</span></a></td>
             <td>{{ computer.name }}</td>
             <td>{{ computer.restaurant.address }}</td>
             <td>{{ computer.restaurant.city }}</td>

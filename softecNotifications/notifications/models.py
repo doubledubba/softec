@@ -118,6 +118,18 @@ class Computer(models.Model):
         latency = (now - self.last_check_in).seconds
         return latency
 
+    def get_badge(self):
+
+        if not self.is_active():
+            return 'badge badge-inverse'
+        elif self.online:
+            return 'badge badge-success'
+        elif self.first_check_in:
+            return 'badge'
+        elif self.restaurant.available():
+            return 'badge badge-warning'
+        else:
+            return 'badge badge-important'
 
 class Restaurant(RestrictedHoursModel):
     name = models.CharField(max_length=80)

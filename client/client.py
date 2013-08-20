@@ -1,5 +1,4 @@
 import sys
-import os
 import hmac
 import logging
 from datetime import datetime
@@ -33,7 +32,12 @@ def connection(path, params={'cid': cid, 'digest': digest}):
 
 # Fetch CHECK_IN_RATE from server
 r = connection('/update/')
-CHECK_IN_RATE = int(r.text) or 60
+if r.text.isdigit():
+    CHECK_IN_RATE = int(r.text)
+else:
+    print('UPDATE FAILED: FALLING BACK TO DEFAULT CHECK_IN_RATE')
+    CHECK_IN_RATE = 15
+    print('SERVER SAYS: %s' % r.text)
 print('CHECK_IN_RATE: %d' % CHECK_IN_RATE)
 
 
@@ -45,6 +49,8 @@ def check_in():
             print(r.text)
         else:
             print("Something went wrong")
+    else:
+        print('No request object returned!')
 
 if __name__ == '__main__':
     try:

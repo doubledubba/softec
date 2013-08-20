@@ -21,6 +21,7 @@ def listings(request):
     restaurants = list(Restaurant.objects.all()) # Find better solution
     restaurants.sort(key=lambda x: x.name.lower())
     restaurants = [r.computer_set.all() for r in restaurants]
+
     params = {
         'offline_computers': offline,
         'restaurants': restaurants,
@@ -43,7 +44,10 @@ def update_view(request):
         return HttpResponse('Invalid digest', content_type='plain/text')
 
 
-    computer = get_object_or_404(Computer, cid=cid)
+    try:
+        computer = Computer.objects.get(cid=cid)
+    except Computer.DoesNotExist:
+        return HttpResponse('No existing computer with cid=%d' % cid, content_type='plain/text')
     computer.stamp_update()
 
     logging.info("Updated %d with CHECK_IN_RATE=%d" % (cid, CHECK_IN_RATE))
