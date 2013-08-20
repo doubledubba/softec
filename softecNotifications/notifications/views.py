@@ -1,4 +1,5 @@
 from datetime import datetime
+import json
 
 from django.shortcuts import render, get_object_or_404, redirect
 from django.contrib.auth.decorators import login_required
@@ -11,15 +12,13 @@ from softecNotifications.settings import CHECK_IN_RATE
 
 logger = logging.getLogger(__name__)
 
-
 @login_required
 def listings(request):
     offline = [computer for computer in Computer.get_actives() if not
             computer.online]
     offline.sort(key=lambda x: x.restaurant.name)
 
-    restaurants = list(Restaurant.objects.all()) # Find better solution
-    restaurants.sort(key=lambda x: x.name.lower())
+
     restaurants = [r.computer_set.all() for r in restaurants]
 
     params = {
@@ -28,6 +27,41 @@ def listings(request):
         'timestamp': datetime.now(),
     }
     return render(request, 'notifications/listings.html', params)
+
+
+def dictize(obj, attrs):
+    """Turns a python object into a dictionary"""
+    model = {}
+    for attr in attrs:
+        if hasattr(obj, attr):
+            value = getattr(obj, attr)
+            if callable(value):
+                value = value()
+            model[attr] = value
+
+    return model
+
+from pprint import pformat
+def listings_json(request):
+    model = {'restaurants': []}
+    restaurants = list(Restaurant.objects.filter(active=True)) # Find better solution
+    restaurants.sort(key=lambda x: x.name.lower())
+    for restaurant in restaurants:
+        jRestaurant = {
+            'name': restaurant.name,
+            'url': restaurant.get_absolute_url(),
+            'active': restaurant.active,
+            'computers': [],
+        }
+        for computer in restaurant.computer_set.all():
+            jComputer = dictize(computer, ['name', 'cid', 'is_active', 'online', 'notify_on_fail', 'js_warning', 'get_badge'])
+            jRestaurant['computers'].append(jComputer)
+
+        model['restaurants'].append(jRestaurant)
+
+    data = json.dumps(model)
+
+    return HttpResponse(data, content_type='text/plain')
 
 
 @csrf_exempt

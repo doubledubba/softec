@@ -14,4 +14,5 @@ urlpatterns += patterns('notifications.views',
     url(r'^update/$', 'update_view'),
     url(r'check_in/$', 'check_in_view'),
     url(r'^listings/$', 'listings'),
+    url(r'^listings/json$', 'listings_json'),
 )

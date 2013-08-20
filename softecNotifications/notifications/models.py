@@ -144,6 +144,9 @@ class Restaurant(RestrictedHoursModel):
     agents = models.ManyToManyField(Agent, blank=True)
     owners = models.ManyToManyField(Owner, blank=True)
 
+    def get_absolute_url(self):
+        return '/restaurant/%d' % self.pk
+
     def title(self):
         return '%s in %s, %s' % (self.name, self.city, self.state)
 
