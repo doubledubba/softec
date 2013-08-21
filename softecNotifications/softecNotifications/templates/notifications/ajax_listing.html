@@ -67,14 +67,20 @@ function get_offline_computers() {
     });
 }
 
+function get_all_computers() {
+
+}
+
 function update_tables() {
     $('tr.data').remove();
     get_offline_computers();
+    get_all_computers();
 }
 
 function init_tables() {
     init_table('#dyn_offline_table', 'Offline Computers');
-    // setTimeout code goes here
+    init_table('#dyn_all_table', 'All Computers');
+
 
     setInterval(function() {
         update_tables();
@@ -89,7 +95,7 @@ function init_tables() {
 {% block body %}
 <legend>Listing</legend>
 
-<input type="submit" onclick="get_offline_computers()"> <br> <br>
+<input type="submit" onclick="update_tables()"> <br> <br>
 <input type="submit" onclick="clear_offline_table()"> <br> <br>
 
 
@@ -136,11 +142,12 @@ function init_tables() {
   </div><!-- /.modal -->
 
 
-    <div id="dyn_offline_table">
+<div id="dyn_offline_table">
 
-    </div>
+</div>
 
+<div id="dyn_all_table">
 
-
+</div>
 
 {% endblock body %}
