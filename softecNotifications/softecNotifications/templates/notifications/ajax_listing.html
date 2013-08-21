@@ -27,7 +27,7 @@ function init_table(tableID, caption, headers) {
 
 }
 
-function addRow(tableID, columns, rowspan) {
+function addRow(tableID, columns, rowspan, skip) {
     var table = '<tr class="data">';
     for (var i in columns) {
         if (rowspan) {
