@@ -54,17 +54,19 @@ function get_offline_computers() {
 
                 if (!computer.online) {
                     console.log(computer);
-                    var computer = [
+                    var rows = [
                     computer.cid, computer.name, computer.restaurant.name, computer.restaurant.address,
                             computer.restaurant.city, computer.restaurant.state, computer.restaurant.phone
                     ]
-                    for (var item in computer) {
-                        if (!computer[item]) {
-                            computer[item] = '';
+                    rows[0] = '<a href="' + computer.get_absolute_url + '"> <span class="' + computer.get_badge + '">' + computer.cid + '</span></a>'
+                    console.log('badge: ' + rows[0]);
+                    for (var item in rows) {
+                        if (!rows[item]) {
+                            rows[item] = '';
                         }
                     }
 
-                    addRow('myTable', computer);
+                    addRow('myTable', rows);
                 }
             })
         })
