@@ -28,6 +28,10 @@ function init_table(tableID, caption) {
 function init_tables() {
     init_table('#dyn_offline_table', 'Offline Computers');
     // setTimeout code goes here
+
+    setInterval(function() {
+        $('tr.data').remove()
+    }, 5000);
 }
 
 
