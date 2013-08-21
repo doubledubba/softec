@@ -49,7 +49,15 @@ def listings_json(request):
                 'online': computer.online,
                 'notify_on_fail': computer.notify_on_fail,
                 'js_warning': computer.js_warning,
-                'get_badge': computer.get_badge()
+                'get_badge': computer.get_badge(),
+                'restaurant': {
+                    'name': restaurant.name,
+                    'address': restaurant.address,
+                    'city': restaurant.city,
+                    'state': restaurant.state,
+                    'phone': restaurant.phone,
+                    'url': restaurant.get_absolute_url()
+                }
             }
             jRestaurant['computers'].append(jComputer)
 

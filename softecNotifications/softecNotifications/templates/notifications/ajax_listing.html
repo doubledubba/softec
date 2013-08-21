@@ -7,27 +7,6 @@ $(document).ready(function(){
     // Your jQuery code goes in here
 });
 
-computers = [];
-function addComputer(computer) {
-    computers.push(computer);
-    console.log(computers);
-}
-
-function get_offline_computers() {
-    $.getJSON('/listings/json', function(data) {
-        $.each(data.restaurants, function(index, restaurant) {
-            //console.log(restaurant.name);
-            $.each(restaurant.computers, function(index, computer) {
-
-                if (!computer.online) {
-                    console.log(computer);
-                    addComputer(computer);
-                }
-            })
-        })
-    });
-}
-
 function init_table(tableID) {
     // create table
     var $table = $('<table id="myTable" border="1" class="table table-condenses">');
@@ -41,16 +20,6 @@ function init_table(tableID) {
     //tbody
     var $tbody = $table.append('<tbody />').children('tbody');
 
-    // add row
-    $tbody.append('<tr />').children('tr:last')
-    .append("<td>val</td>")
-    .append("<td>val</td>")
-    .append("<td>val</td>")
-    .append("<td>val</td>")
-    .append("<td>val</td>")
-    .append("<td>val</td>")
-    .append("<td>val</td>");
-
     // add table to dom
     $table.appendTo(tableID);
 
@@ -62,22 +31,45 @@ function init_tables() {
 }
 
 
-function addRow(columns) {
+function addRow(tableID, columns) {
     var table = '<tr>';
     for (var i in columns) {
+        console.log(i);
+        console.log(columns[i]);
         table += '<td>'
         table += columns[i].toString();
         table += '</td>';
     }
     table += '</tr>';
-    $('#myTable tr:last').after(table);
+    //$('#myTable tr:last').after(table);
+    $('#' + tableID + ' tr:last').after(table);
 
 }
 
-function addRows() {
-    addRow([1,2,3,4,5,6,7]);
-}
+function get_offline_computers() {
+    $.getJSON('/listings/json', function(data) {
+        $.each(data.restaurants, function(index, restaurant) {
+            //console.log(restaurant.name);
+            $.each(restaurant.computers, function(index, computer) {
 
+                if (!computer.online) {
+                    console.log(computer);
+                    var computer = [
+                    computer.cid, computer.name, computer.restaurant.name, computer.restaurant.address,
+                            computer.restaurant.city, computer.restaurant.state, computer.restaurant.phone
+                    ]
+                    for (var item in computer) {
+                        if (!computer[item]) {
+                            computer[item] = '';
+                        }
+                    }
+
+                    addRow('myTable', computer);
+                }
+            })
+        })
+    });
+}
 </script>
 
 {% endblock head %}
@@ -87,7 +79,7 @@ function addRows() {
 {% block body %}
 <legend>Listing</legend>
 
-<input type="submit" onclick="addRows()"> <br> <br>
+<input type="submit" onclick="get_offline_computers()"> <br> <br>
 
 
 <div class="row">
