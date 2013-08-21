@@ -9,7 +9,7 @@ $(document).ready(function(){
 });
      **/
 
-function init_table(tableID, caption) {
+function init_table(tableID, caption, headers) {
     // create table
     var $table = $('<table id="' + tableID + '" border="1" class="table table-condenses">');
     console.log('<table id="' + tableID + '" border="1" class="table table-condenses">')
@@ -17,8 +17,7 @@ function init_table(tableID, caption) {
     $table.append('<caption>' + caption + '</caption>')
     // thead
     .append('<thead>').children('thead')
-    .append('<tr />').children('tr').append('<th>ID</th><th>Name</th><th>Restaurant</th><th>Address</th>' +
-                    '<th>City</th><th>State</th><th>Phone</th>');
+    .append('<tr />').children('tr').append(headers);
 
     //tbody
     var $tbody = $table.append('<tbody />').children('tbody');
@@ -28,15 +27,48 @@ function init_table(tableID, caption) {
 
 }
 
-function addRow(tableID, columns) {
+function addRow(tableID, columns, rowspan) {
     var table = '<tr class="data">';
     for (var i in columns) {
-        table += '<td>'
+        if (rowspan) {
+            table += '<td rowspan="' + rowspan + '">';
+        }
+        else {
+            table += '<td>';
+        }
         table += columns[i].toString();
         table += '</td>';
     }
     table += '</tr>';
     $('#' + tableID + ' tr:last').after(table);
+
+}
+
+function update_all_table() {
+    $.getJSON('/listings/json/all', function(data) {
+        $.each(data.restaurants, function(index, restaurant) {
+            $.each(restaurant.computers, function(index, computer) {
+
+                var rows = [
+                restaurant.name, computer.cid, computer.name, restaurant.address,
+                        restaurant.city, restaurant.state, restaurant.phone
+                ]
+                rows[1] = '<a href="' + computer.url + '"> <span class="' + computer.get_badge + '">' + computer.cid + '</span></a>'
+                for (var item in rows) {
+                    if (!rows[item]) {
+                        rows[item] = '';
+                    }
+                }
+                if (index == 0) {
+                    console.log('Should be skipping this row: ' + computer.cid + ' rowspan=' + restaurant.computers.length);
+                    addRow('dyn_all_table', rows)
+                }
+                else {
+                    addRow('dyn_all_table', rows);
+                }
+            })
+        })
+    });
 
 }
 
@@ -60,26 +92,6 @@ function update_offline_table() {
     })
 }
 
-function update_all_table() {
-    $.getJSON('/listings/json/all', function(data) {
-        $.each(data.restaurants, function(index, restaurant) {
-            $.each(restaurant.computers, function(index, computer) {
-                var rows = [
-                computer.cid, computer.name, restaurant.name, restaurant.address,
-                        restaurant.city, restaurant.state, restaurant.phone
-                ]
-                rows[0] = '<a href="' + computer.url + '"> <span class="' + computer.get_badge + '">' + computer.cid + '</span></a>'
-                for (var item in rows) {
-                    if (!rows[item]) {
-                        rows[item] = '';
-                    }
-                }
-                addRow('dyn_all_table', rows);
-            })
-        })
-    });
-
-}
 
 function update_tables() {
     $('tr.data').remove();
@@ -88,8 +100,10 @@ function update_tables() {
 }
 
 function init_tables() {
-    init_table('#dyn_offline_table', 'Offline Computers');
-    init_table('#dyn_all_table', 'All Computers');
+    init_table('#dyn_offline_table', 'Offline Computers', '<th>ID</th><th>Name</th><th>Restaurant</th><th>Address</th>' +
+                    '<th>City</th><th>State</th><th>Phone</th>');
+    init_table('#dyn_all_table', 'All Computers', '<th>Restaurant</th><th>ID</th><th>Name</th><th>Address</th>' +
+                    '<th>City</th><th>State</th><th>Phone</th>');
     update_tables();
 
     setInterval(function() {
