@@ -35,36 +35,24 @@ def listings_json(request):
     restaurants = list(Restaurant.objects.filter(active=True)) # Find better solution
     restaurants.sort(key=lambda x: x.name.lower())
     for restaurant in restaurants:
-        jRestaurant = {
-            'name': restaurant.name,
-            'url': restaurant.get_absolute_url(),
-            'active': restaurant.active,
-            'computers': [],
-        }
-        for computer in restaurant.computer_set.all():
-            jComputer = {
-                'name': computer.name,
-                'cid': computer.cid,
-                'is_active': computer.is_active(),
-                'online': computer.online,
-                'notify_on_fail': computer.notify_on_fail,
-                'js_warning': computer.js_warning,
-                'get_badge': computer.get_badge(),
-                'restaurant': {
-                    'name': restaurant.name,
-                    'address': restaurant.address,
-                    'city': restaurant.city,
-                    'state': restaurant.state,
-                    'phone': restaurant.phone,
-                    'url': restaurant.get_absolute_url()
-                }
-            }
-            jRestaurant['computers'].append(jComputer)
-
+        jRestaurant = restaurant.to_dict(wComputers=True)
         model['restaurants'].append(jRestaurant)
 
     data = json.dumps(model)
 
+    return HttpResponse(data, content_type='application/json')
+
+def listings_json_offline(request):
+    computers = Computer.objects.filter(active=True, online=False)
+    computers = list(computers)
+    computers.sort(key=lambda x: x.name.lower())
+    model = {
+        'computers': []
+    }
+    for computer in computers:
+        jComputer = computer.to_dict(wRestaurant=True)
+        model['computers'].append(jComputer)
+    data = json.dumps(model)
     return HttpResponse(data, content_type='application/json')
 
 def ajax_listings(request):

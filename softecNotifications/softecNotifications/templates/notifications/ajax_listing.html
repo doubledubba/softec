@@ -28,8 +28,6 @@ function init_table(tableID, caption) {
 function addRow(tableID, columns) {
     var table = '<tr class="data">';
     for (var i in columns) {
-        console.log(i);
-        console.log(columns[i]);
         table += '<td>'
         table += columns[i].toString();
         table += '</td>';
@@ -41,19 +39,22 @@ function addRow(tableID, columns) {
 }
 
 function get_offline_computers() {
-    $.getJSON('/listings/json', function(data) {
+    $.getJSON('/listings/json/offline', function(data) {
+        console.log(data.computers);
+    })
+}
+
+function get_all_computers() {
+    $.getJSON('/listings/json/all', function(data) {
         $.each(data.restaurants, function(index, restaurant) {
-            //console.log(restaurant.name);
             $.each(restaurant.computers, function(index, computer) {
 
                 if (!computer.online) {
-                    console.log(computer);
                     var rows = [
-                    computer.cid, computer.name, computer.restaurant.name, computer.restaurant.address,
-                            computer.restaurant.city, computer.restaurant.state, computer.restaurant.phone
+                    computer.cid, computer.name, restaurant.name, restaurant.address,
+                            restaurant.city, restaurant.state, restaurant.phone
                     ]
-                    rows[0] = '<a href="' + computer.get_absolute_url + '"> <span class="' + computer.get_badge + '">' + computer.cid + '</span></a>'
-                    console.log('badge: ' + rows[0]);
+                    rows[0] = '<a href="' + computer.url + '"> <span class="' + computer.get_badge + '">' + computer.cid + '</span></a>'
                     for (var item in rows) {
                         if (!rows[item]) {
                             rows[item] = '';
@@ -65,9 +66,6 @@ function get_offline_computers() {
             })
         })
     });
-}
-
-function get_all_computers() {
 
 }
 

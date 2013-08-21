@@ -1,4 +1,5 @@
 from datetime import datetime, time
+import json
 
 from django.utils.timezone import utc
 from django.db import models
@@ -119,6 +120,9 @@ class Computer(models.Model):
         return latency
 
     def get_badge(self):
+        """Used for rendering the correct badge on the /listings page.
+
+        Put the code into a method to remove logic on the template side"""
 
         if not self.is_active():
             return 'badge badge-inverse'
@@ -130,6 +134,25 @@ class Computer(models.Model):
             return 'badge badge-warning'
         else:
             return 'badge badge-important'
+
+    def to_dict(self, wRestaurant=False):
+        """Converts Model instance into a serializable dictionary for JSON conversion.
+
+        If wRestaurant=True, the restaurant object will be included as it's own dictionary."""
+        jComputer = {
+            'name': self.name,
+            'cid': self.cid,
+            'is_active': self.is_active(),
+            'online': self.online,
+            'notify_on_fail': self.notify_on_fail,
+            'js_warning': self.js_warning,
+            'get_badge': self.get_badge(),
+            'url': self.get_absolute_url(),
+        }
+        if wRestaurant:
+            jComputer['restaurant'] = self.restaurant.to_dict(wComputers=False)
+        return jComputer
+
 
 class Restaurant(RestrictedHoursModel):
     name = models.CharField(max_length=80)
@@ -149,6 +172,26 @@ class Restaurant(RestrictedHoursModel):
 
     def title(self):
         return '%s in %s, %s' % (self.name, self.city, self.state)
+
+    def to_dict(self, wComputers=False):
+        """Converts Model instance into a serializable dictionary for JSON conversion.
+
+        If wComputer=True, the computer objects will be included as a list of dicts."""
+        jRestaurant = {
+            'name': self.name,
+            'address': self.address,
+            'city': self.city,
+            'state': self.state,
+            'phone': self.phone,
+            'url': self.get_absolute_url(),
+            'active': self.active,
+        }
+        if wComputers:
+            jRestaurant['computers'] = []
+            for computer in self.computer_set.all():
+                computer_dict = computer.to_dict(wRestaurant=False)
+                jRestaurant['computers'].append(computer_dict)
+        return jRestaurant
 
 
 def querySetToStr(objects, attr):
