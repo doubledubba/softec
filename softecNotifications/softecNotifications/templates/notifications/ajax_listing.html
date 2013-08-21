@@ -28,7 +28,7 @@ function get_offline_computers() {
     });
 }
 
-function tryit() {
+function init_table(tableID) {
     // create table
     var $table = $('<table id="myTable" border="1" class="table table-condenses">');
     // caption
@@ -52,40 +52,42 @@ function tryit() {
     .append("<td>val</td>");
 
     // add table to dom
-    $table.appendTo('#dyn_offline_table');
+    $table.appendTo(tableID);
+
+}
+
+function init_tables() {
+    init_table('#dyn_offline_table');
 
 }
 
 
-function addRow() {
-    $('#myTable tr:last').after('<tr>' +
-            '<td>asdfasdf</td>' +
-            '<td>10</td>' +
-            '<td>10</td>' +
-            '<td>10</td>' +
-            '<td>10</td>' +
-            '<td>10</td>' +
-            '<td>10</td>' +
-            '</tr>');
+function addRow(columns) {
+    var table = '<tr>';
+    for (var i in columns) {
+        table += '<td>'
+        table += columns[i].toString();
+        table += '</td>';
+    }
+    table += '</tr>';
+    $('#myTable tr:last').after(table);
+
 }
-/**
- *         {% for computer in offline_computers %}
-        <tr>
-            <td>{{ computer.cid }}</td>
-        </tr>
-        {% endfor %}
- */
+
+function addRows() {
+    addRow([1,2,3,4,5,6,7]);
+}
 
 </script>
 
 {% endblock head %}
 
-{% block body_tag %}<body onload="tryit()">{% endblock %}
+{% block body_tag %}<body onload="init_tables()">{% endblock %}
 
 {% block body %}
 <legend>Listing</legend>
 
-<input type="submit" onclick="addRow()"> <br> <br>
+<input type="submit" onclick="addRows()"> <br> <br>
 
 
 <div class="row">
