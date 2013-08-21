@@ -25,16 +25,6 @@ function init_table(tableID, caption) {
 
 }
 
-function init_tables() {
-    init_table('#dyn_offline_table', 'Offline Computers');
-    // setTimeout code goes here
-
-    setInterval(function() {
-        $('tr.data').remove()
-    }, 5000);
-}
-
-
 function addRow(tableID, columns) {
     var table = '<tr class="data">';
     for (var i in columns) {
@@ -77,8 +67,18 @@ function get_offline_computers() {
     });
 }
 
-function clear_tables() {
+function update_tables() {
     $('tr.data').remove();
+    get_offline_computers();
+}
+
+function init_tables() {
+    init_table('#dyn_offline_table', 'Offline Computers');
+    // setTimeout code goes here
+
+    setInterval(function() {
+        update_tables();
+    }, 5000);
 }
 </script>
 
