@@ -12,7 +12,6 @@ $(document).ready(function(){
 function init_table(tableID, caption, headers) {
     // create table
     var $table = $('<table id="' + tableID + '" border="1" class="table table-condenses">');
-    console.log('<table id="' + tableID + '" border="1" class="table table-condenses">')
     // caption
     $table.append('<caption style="text-align: center;font-size: 30px">' + caption + '</caption><br><br>')
     // thead
@@ -27,7 +26,7 @@ function init_table(tableID, caption, headers) {
 
 }
 
-function addRow(tableID, column) {
+function addRow(tableID, columns) {
     var table = '<tr class="data">\n';
     for (var i in columns) {
         table += '\t<td>';
@@ -64,7 +63,6 @@ function update_all_table() {
                     tr += '\t<td>' + restaurant.phone + '</td>\n';
                 }
                 tr += '</tr>';
-                console.log(tr);
                 $('#dyn_all_table tr:last').after(tr);
             })
         })
@@ -75,7 +73,6 @@ function update_all_table() {
 function update_offline_table() {
     $.getJSON('/listings/json/offline', function(data) {
         $.each(data.computers, function(index, computer) {
-           // console.log(computer);
             var rows = [
             computer.cid, computer.name, computer.restaurant.name, computer.restaurant.address,
                     computer.restaurant.city, computer.restaurant.state, computer.restaurant.phone
@@ -86,8 +83,27 @@ function update_offline_table() {
                     rows[item] = '';
                 }
             }
-
             addRow('dyn_offline_table', rows);
+            /**
+             * <div class="alert alert-dismissable alert-danger" id="test">
+  <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+  <strong>Warning!</strong> Best check yo self, you're not looking too good.
+</div>
+             */
+            if (computer.alert) {
+                console.log('Alert: ' + computer.cid);
+                var warning = '<div class="alert alert-dismissable alert-danger" id="alert' + computer.cid + '">\n';
+                warning += '\t<button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>\n';
+                warning += '<strong>Warning</strong> <a href="' + computer.url + '" class="alert-link">' + 'Computer #' + computer.cid + ' is down!';
+                warning += '</a></div>';
+                $('#alerts').append(warning);
+                document.getElementById('beep').play();
+                //$('#alerts').append();
+                setTimeout(function() {
+                    $('#alert' + computer.cid).alert('close');
+                    console.log('setting timeout: #alert' + computer.cid)
+                }, 10000)
+            }
         })
     })
 }
@@ -117,6 +133,14 @@ function init_tables() {
 {% block body_tag %}<body onload="init_tables()">{% endblock %}
 
 {% block body %}
+
+
+<audio id="beep" src="/static/ring.mp3" preload="auto"></audio>
+<br>
+<div id="alerts">
+
+</div>
+
 <br>
 <div class="row">
   <div class="col-md-10">
@@ -159,7 +183,6 @@ function init_tables() {
       </div><!-- /.modal-content -->
     </div><!-- /.modal-dialog -->
   </div><!-- /.modal -->
-
 
 <div id="dyn_offline_table">
 

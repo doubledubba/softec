@@ -13,6 +13,7 @@ from django.utils.timezone import utc
 from notifications.models import Computer
 
 MAX_LATENCY = 45
+MAX_LATENCY = 10
 
 def alert(log, message, computer=None):
     log(message)

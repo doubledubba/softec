@@ -149,13 +149,34 @@ class Computer(models.Model):
             'is_active': self.is_active(),
             'online': self.online,
             'notify_on_fail': self.notify_on_fail,
-            'js_warning': self.js_warning,
+            'alert': self.alert(),
             'get_badge': self.get_badge(),
             'url': self.get_absolute_url(),
         }
         if wRestaurant:
             jComputer['restaurant'] = self.restaurant.to_dict(wComputers=False)
         return jComputer
+
+    def alert(self):
+        '''Returns True if the user should be alerted of a change in computer
+        connectivity. Only returns True when a computer goes offline..
+
+        first_check, js_warning, and notify are all default=True.'''
+
+        if self.first_check_in:
+            self.js_warning = False
+            save()
+
+
+        if not self.online and self.js_warning:
+            self.js_warning=False
+            self.save()
+            return True
+
+        if self.online and not self.js_warning:
+            self.js_warning = True
+            self.save()
+            return False
 
 
 class Restaurant(RestrictedHoursModel):
