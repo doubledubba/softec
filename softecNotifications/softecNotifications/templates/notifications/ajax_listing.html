@@ -14,7 +14,7 @@ function init_table(tableID, caption, headers) {
     var $table = $('<table id="' + tableID + '" border="1" class="table table-condenses">');
     console.log('<table id="' + tableID + '" border="1" class="table table-condenses">')
     // caption
-    $table.append('<caption>' + caption + '</caption>')
+    $table.append('<caption style="text-align: center;font-size: 30px">' + caption + '</caption><br><br>')
     // thead
     .append('<thead>').children('thead')
     .append('<tr />').children('tr').append(headers);
@@ -122,12 +122,7 @@ function init_tables() {
 {% block body_tag %}<body onload="init_tables()">{% endblock %}
 
 {% block body %}
-<legend>Listing</legend>
-
-<input type="submit" onclick="update_tables()"> <br> <br>
-<input type="submit" onclick="clear_offline_table()"> <br> <br>
-
-
+<br>
 <div class="row">
   <div class="col-md-10">
       <a data-toggle="modal" href="#myModal" class="btn btn-primary btn-md">What do all the colors mean?</a>
