@@ -84,12 +84,6 @@ function update_offline_table() {
                 }
             }
             addRow('dyn_offline_table', rows);
-            /**
-             * <div class="alert alert-dismissable alert-danger" id="test">
-  <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
-  <strong>Warning!</strong> Best check yo self, you're not looking too good.
-</div>
-             */
             if (computer.alert) {
                 console.log('Alert: ' + computer.cid);
                 var warning = '<div class="alert alert-dismissable alert-danger" id="alert' + computer.cid + '">\n';
@@ -126,6 +120,22 @@ function init_tables() {
         update_tables();
     }, 5000);
 }
+
+var pause = false;
+function playToggle() {
+    if (pause) {
+        $('#toggleIcon').attr('class', 'glyphicon glyphicon-pause');
+        $('#toggleText').text('Click to pause')
+        console.log('Sync resumed!');
+    }
+    else {
+        $('#toggleIcon').attr('class', 'glyphicon glyphicon-play');
+        $('#toggleText').text('Click to play')
+        console.log('Sync paused!');
+    }
+
+    pause = !pause;
+}
 </script>
 
 {% endblock head %}
@@ -147,8 +157,8 @@ function init_tables() {
       <a data-toggle="modal" href="#myModal" class="btn btn-primary btn-md">What do all the colors mean?</a>
   </div>
   <div class="col-md-2">
-      <button type="button" class="btn btn-default btn-md" onclick="location.reload(true)">
-          <span class="glyphicon glyphicon-repeat"></span> Refresh
+      <button type="button" class="btn btn-default btn-md" onclick="playToggle()">
+          <span class="glyphicon glyphicon-pause" id="toggleIcon"></span> <p style="display:inline" id="toggleText">Click to pause</p>
       </button>
   </div>
 </div>
