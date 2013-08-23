@@ -48,24 +48,29 @@ function update_all_table() {
     $.getJSON('/listings/json/all', function(data) {
         $.each(data.restaurants, function(index, restaurant) {
             $.each(restaurant.computers, function(index, computer) {
+                computer['badge'] = '<a href="' + computer.url + '"> <span class="' + computer.get_badge + '">' + computer.cid + '</span></a>'
 
-                var rows = [
-                restaurant.name, computer.cid, computer.name, restaurant.address,
-                        restaurant.city, restaurant.state, restaurant.phone
-                ]
-                rows[1] = '<a href="' + computer.url + '"> <span class="' + computer.get_badge + '">' + computer.cid + '</span></a>'
-                for (var item in rows) {
-                    if (!rows[item]) {
-                        rows[item] = '';
-                    }
-                }
+                var tr = '<tr class="data">\n';
                 if (index == 0) {
-                    console.log('Should be skipping this row: ' + computer.cid + ' rowspan=' + restaurant.computers.length);
-                    addRow('dyn_all_table', rows)
+                    tr += '\t<td rowspan="' + restaurant.computers.length + '">' + restaurant.name + '</td>\n';
+                    tr += '\t<td>' + computer.badge + '</td>\n';
+                    tr += '\t<td>' + computer.name + '</td>\n';
+                    tr += '\t<td>' + restaurant.address + '</td>\n';
+                    tr += '\t<td>' + restaurant.city + '</td>\n';
+                    tr += '\t<td>' + restaurant.state + '</td>\n';
+                    tr += '\t<td>' + restaurant.phone + '</td>\n';
                 }
                 else {
-                    addRow('dyn_all_table', rows);
+                    tr += '\t<td>' + computer.badge + '</td>\n';
+                    tr += '\t<td>' + computer.name + '</td>\n';
+                    tr += '\t<td>' + restaurant.address + '</td>\n';
+                    tr += '\t<td>' + restaurant.city + '</td>\n';
+                    tr += '\t<td>' + restaurant.state + '</td>\n';
+                    tr += '\t<td>' + restaurant.phone + '</td>\n';
                 }
+                tr += '</tr>';
+                console.log(tr);
+                $('#dyn_all_table tr:last').after(tr);
             })
         })
     });
