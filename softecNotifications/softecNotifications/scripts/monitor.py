@@ -11,13 +11,11 @@ os.environ['DJANGO_SETTINGS_MODULE'] = 'softecNotifications.settings'
 from django.utils.timezone import utc
 
 from notifications.models import Computer
-import logging
 
 MAX_LATENCY = 45
 
-def alert(*args, **kwargs):
-    print('Alert function called!')
-    print(args)
+def alert(log, message, **kwargs):
+    log(message)
     print(kwargs)
 
 logger = logging.getLogger('monitor')
@@ -69,10 +67,7 @@ def iterate_over_computers(computers):
             alert(logger.warning, 'Saved %s from limbo' % computer)
             #iterate_over_computers(computers)
             #break
-            message = "%s has not connected in %d seconds." % (computer, # Cut
-                    # and paste from offline trigger TODO: Make offline trigger
-                    # reusable
-                    latency)
+            message = "%s has not connected in %d seconds." % (computer, latency)
             alert(logger.warning, message, important=True, computer=computer)
             computer.notify_on_fail = False
             computer.online = False

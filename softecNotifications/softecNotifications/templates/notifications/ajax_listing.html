@@ -27,19 +27,14 @@ function init_table(tableID, caption, headers) {
 
 }
 
-function addRow(tableID, columns, rowspan, skip) {
-    var table = '<tr class="data">';
+function addRow(tableID, column) {
+    var table = '<tr class="data">\n';
     for (var i in columns) {
-        if (rowspan) {
-            table += '<td rowspan="' + rowspan + '">';
-        }
-        else {
-            table += '<td>';
-        }
+        table += '\t<td>';
         table += columns[i].toString();
-        table += '</td>';
+        table += '</td>\n';
     }
-    table += '</tr>';
+    table += '</tr>\n';
     $('#' + tableID + ' tr:last').after(table);
 
 }
