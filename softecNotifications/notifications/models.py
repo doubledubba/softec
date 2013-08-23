@@ -33,6 +33,9 @@ class RestrictedHoursModel(models.Model):
     def available(self):
         if self.endHours == time(hour=0, minute=0):
             self.endHours = time(hour=23, minute=59, second=59)
+        # what if there are no defined hours?
+        if not self.startHours or not self.endHours:
+            return True
         return self.startHours < datetime.now().time() < self.endHours
 
 class BaseContact(RestrictedHoursModel):
