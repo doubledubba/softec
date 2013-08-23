@@ -14,46 +14,34 @@ from notifications.models import Computer
 
 MAX_LATENCY = 45
 
-def alert(log, message, **kwargs):
+def alert(log, message, computer=None):
     log(message)
-    print(kwargs)
+    if computer: # computer is down, now alert
+        print computer
 
 logger = logging.getLogger('monitor')
 logger.setLevel(logging.DEBUG)
 
-def iterate_over_computers(computers):
+def iterate_over_computers(computers=None):
+    computers = computers or Computer.get_actives()
     for computer in computers:
-
-        if not computer.is_active():
-            logger.debug('Skipped: %s' % computer)
-            continue
-
         if not computer.last_check_in:
             logger.debug('%s is active but has not checked in yet' % computer)
             continue # it needs to check in first
 
         if computer.first_check_in and computer.last_check_in:
-            logger.debug('%s has done its first check in' % computer)
             alert(logger.info, '%s has done it\'s first check in' % computer)
             computer.first_check_in = False
             computer.save()
 
         latency = computer.getLatency()  # int
 
-        #print computer
-        #print 'Latency:', latency
-        #print 'In time:', latency < MAX_LATENCY
-        #print 'Out of time:', latency > MAX_LATENCY
-        #print 'Offline trigger:', latency > MAX_LATENCY and computer.notify 
-        #print 'Online trigger', latency < MAX_LATENCY and not computer.notify,
-
         if latency > MAX_LATENCY and computer.notify_on_fail: # offline trigger
             message = "%s has not connected in %d seconds." % (computer,
                     latency)
-            alert(logger.warning, message, important=True, computer=computer)
+            alert(logger.warning, message, computer)
             computer.notify_on_fail = False
             computer.online = False
-            failure = datetime.now().strftime('%c') + ','
             computer.save()
 
         if latency < MAX_LATENCY and not computer.notify_on_fail: # online trigger
@@ -61,27 +49,14 @@ def iterate_over_computers(computers):
             computer.save()
             alert(logger.info, '%s is back online.' % computer)
 
-        if latency > MAX_LATENCY and not computer.notify_on_fail and not computer.first_check_in and computer.online:
-            computer.notify = True
-            computer.save()
+        if latency > MAX_LATENCY and not computer.notify_on_fail and not computer.first_check_in and computer.online: #weird limbo logic exception
             alert(logger.warning, 'Saved %s from limbo' % computer)
-            #iterate_over_computers(computers)
-            #break
             message = "%s has not connected in %d seconds." % (computer, latency)
-            alert(logger.warning, message, important=True, computer=computer)
+            alert(logger.warning, message, computer)
             computer.notify_on_fail = False
             computer.online = False
-            failure = datetime.now().strftime('%c') + ','
             computer.save()
-
-
-def getComputers():
-    for computer in Computer.objects.all():
-        if computer.is_active():
-            yield computer
-        else:
-            print computer, 'is not being monitored.'
 
 
 if __name__ == '__main__':
-    iterate_over_computers(getComputers())
+    iterate_over_computers()
