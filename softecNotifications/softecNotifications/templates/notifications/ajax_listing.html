@@ -70,6 +70,22 @@ function update_all_table() {
 
 }
 
+function setAlert(category, message, id, timeout, beep) {
+    var warning = '<div class="alert alert-dismissable alert-' + category + '" id="' + id + '">\n';
+    warning += '\t<button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>\n';
+    warning += message;
+    warning += '</div>';
+    $('#alerts').append(warning);
+    if (beep) {
+        document.getElementById('beep').play();
+    }
+    if (timeout && id) {
+        setTimeout(function() {
+            $('#' + id).alert('close');
+        }, timeout)
+    }
+}
+
 function update_offline_table() {
     $.getJSON('/listings/json/offline', function(data) {
         $.each(data.computers, function(index, computer) {
@@ -85,18 +101,9 @@ function update_offline_table() {
             }
             addRow('dyn_offline_table', rows);
             if (computer.alert) {
-                console.log('Alert: ' + computer.cid);
-                var warning = '<div class="alert alert-dismissable alert-danger" id="alert' + computer.cid + '">\n';
-                warning += '\t<button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>\n';
-                warning += '<strong>Warning</strong> <a href="' + computer.url + '" class="alert-link">' + 'Computer #' + computer.cid + ' is down!';
-                warning += '</a></div>';
-                $('#alerts').append(warning);
-                document.getElementById('beep').play();
-                //$('#alerts').append();
-                setTimeout(function() {
-                    $('#alert' + computer.cid).alert('close');
-                    console.log('setting timeout: #alert' + computer.cid)
-                }, 10000)
+                var message = '<strong>Warning</strong> <a href="' + computer.url + '" class="alert-link">' + 'Computer #' + computer.cid + ' is down!</a>';
+                var id = 'alert' + computer.cid;
+                setAlert('danger', message, id, 10000, true)
             }
         })
     })
@@ -127,11 +134,15 @@ function playToggle() {
         $('#toggleIcon').attr('class', 'glyphicon glyphicon-pause');
         $('#toggleText').text('Click to pause')
         console.log('Sync resumed!');
+        $('#togglePauseAlert').alert('close');
+        setAlert('info', 'Sync resumed!', 'toggleResumeAlert', 5000);
     }
     else {
         $('#toggleIcon').attr('class', 'glyphicon glyphicon-play');
         $('#toggleText').text('Click to play')
         console.log('Sync paused!');
+        $('#toggleResumeAlert').alert('close');
+        setAlert('info', 'Sync paused!', 'togglePauseAlert', 5000);
     }
 
     pause = !pause;
