@@ -164,7 +164,7 @@ class Computer(models.Model):
 
         if self.first_check_in:
             self.js_warning = False
-            save()
+            self.save()
 
 
         if not self.online and self.js_warning:
