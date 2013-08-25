@@ -6,22 +6,40 @@ from datetime import datetime
 import logging
 sys.path.append('/home/luis/Dropbox/projects/softec/softecNotifications/')
 os.environ['DJANGO_SETTINGS_MODULE'] = 'softecNotifications.settings'
-
-
 from django.utils.timezone import utc
-
 from notifications.models import Computer
 
 MAX_LATENCY = 45
-MAX_LATENCY = 10
+MAX_LATENCY = 15
+
+logger = logging.getLogger('monitor')
+logger.setLevel(logging.DEBUG)
 
 def alert(log, message, computer=None):
     log(message)
     if computer: # computer is down, now alert
         print computer
 
-logger = logging.getLogger('monitor')
-logger.setLevel(logging.DEBUG)
+def flag(computer, notify=False):
+    computer.online = False
+    computer.log_action(offline=True)
+    if notify:
+        computer.notify_on_fail = False
+    computer.save()
+
+def flag_offline(computer):
+    log = computer.get_log()
+    if log:
+        now = datetime.utcnow().replace(tzinfo=utc)
+        most_recent = log[-1]['timeStamp']
+        latency = (now - most_recent).seconds
+        print 'latency: ', latency
+        if latency < 180: # 3minutes
+            flag(computer)
+        else:
+            flag(computer, True)
+    else:
+        flag(computer)
 
 def iterate_over_computers(computers=None):
     computers = computers or Computer.get_actives()
@@ -41,9 +59,7 @@ def iterate_over_computers(computers=None):
             message = "%s has not connected in %d seconds." % (computer,
                     latency)
             alert(logger.warning, message, computer)
-            computer.notify_on_fail = False
-            computer.online = False
-            computer.save()
+            flag_offline(computer)
 
         if latency < MAX_LATENCY and not computer.notify_on_fail: # online trigger
             computer.notify_on_fail = True
@@ -54,9 +70,7 @@ def iterate_over_computers(computers=None):
             alert(logger.warning, 'Saved %s from limbo' % computer)
             message = "%s has not connected in %d seconds." % (computer, latency)
             alert(logger.warning, message, computer)
-            computer.notify_on_fail = False
-            computer.online = False
-            computer.save()
+            flag_offline(computer)
 
 
 if __name__ == '__main__':

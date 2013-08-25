@@ -93,7 +93,6 @@ class Computer(models.Model):
 
         return self.restaurant.active and self.active
 
-
     def check_in(self):
         'Clean method of checking in computers periodically. As simple as calling.'
 
@@ -178,6 +177,30 @@ class Computer(models.Model):
             self.save()
             return False
 
+    def log_action(self, **kwargs):
+        '''Logs all kwargs with a timestamp in a text field.
+
+        The log is in chronological order, starting from the beginning. There should be a cron job that wipes old
+        entries in the log. Remember that this method does not call self.save() to avoid redundant saves'''
+
+        kwargs['timeStamp'] = datetime.utcnow().replace(tzinfo=utc).strftime('%c')
+        if self.failures == '':
+            log = [kwargs,]
+            log = json.dumps(log)
+        else:
+            log = json.loads(self.failures)
+            log.append(kwargs)
+            log = json.dumps(log)
+        self.failures = log
+
+    def get_log(self):
+        '''Converts timestamps from strings to datetime objects. Notice that it will return None if log is empty.'''
+
+        if self.failures:
+            log = json.loads(self.failures)
+            for entry in log:
+                entry['timeStamp'] = datetime.strptime(entry['timeStamp'], '%c').replace(tzinfo=utc)
+            return log
 
 class Restaurant(RestrictedHoursModel):
     name = models.CharField(max_length=80)
