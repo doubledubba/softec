@@ -111,11 +111,13 @@ function update_offline_table() {
 
 
 function update_tables() {
+    console.log('updating tables');
     $('tr.data').remove();
     update_offline_table();
     update_all_table();
 }
 
+var refreshIntervalID;
 function init_tables() {
     init_table('#dyn_offline_table', 'Offline Computers', '<th>ID</th><th>Name</th><th>Restaurant</th><th>Address</th>' +
                     '<th>City</th><th>State</th><th>Phone</th>');
@@ -123,22 +125,26 @@ function init_tables() {
                     '<th>City</th><th>State</th><th>Phone</th>');
     update_tables();
 
-    setInterval(function() {
+    refreshIntervalID = setInterval(function() {
         update_tables();
     }, 5000);
 }
 
-var pause = false;
+var togglePause = false;
 var toggleResumeCount = 1;
 var togglePauseCount = 1;
 function playToggle() {
-    if (pause) {
+    if (togglePause) {
         $('#toggleIcon').attr('class', 'glyphicon glyphicon-pause');
         $('#toggleText').text('Click to pause')
         console.log('Sync resumed!');
         $('#togglePauseAlert' + (togglePauseCount - 1)).alert('close');
         setAlert('info', 'Sync resumed!', 'toggleResumeAlert' + toggleResumeCount, 5000);
         toggleResumeCount += 1;
+
+        refreshIntervalID = setInterval(function() {
+            update_tables();
+        }, 5000);
     }
     else {
         $('#toggleIcon').attr('class', 'glyphicon glyphicon-play');
@@ -147,9 +153,12 @@ function playToggle() {
         $('#toggleResumeAlert' + (toggleResumeCount - 1)).alert('close');
         setAlert('info', 'Sync paused!', 'togglePauseAlert' + togglePauseCount, 5000);
         togglePauseCount += 1;
+
+        clearInterval(refreshIntervalID);
     }
 
-    pause = !pause;
+
+    togglePause = !togglePause;
 }
 </script>
 
