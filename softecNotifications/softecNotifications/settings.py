@@ -125,6 +125,7 @@ INSTALLED_APPS = (
 
     'home',
     'notifications',
+    'knowledge',
 )
 
 # A sample logging configuration. The only tangible logging
@@ -183,3 +184,4 @@ def setHighestID(count):
         count = str(count)
         fh.write(count)
 
+DOMAIN = 'http://softec.webfactional.com'

@@ -18,3 +18,10 @@ urlpatterns += patterns('notifications.views',
     url(r'^listings/json/offline$', 'listings_json_offline'),
     url(r'^listings/ajax$', 'ajax_listings'),
 )
+
+urlpatterns += patterns('knowledge.views',
+
+    url(r'^knowledge/$', 'index'),
+    url(r'^knowledge/(?P<pk>.+)/$', 'show_article'),
+    url(r'^knowledge/(?P<pk>.+)/raw$', 'show_raw_article'),
+    )
